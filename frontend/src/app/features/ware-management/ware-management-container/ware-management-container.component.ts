@@ -50,7 +50,7 @@ export class WareManagementContainerComponent {
 
 
 
-  handleWareFormSubmit = (formValue : any) => {
+  handleWareCreateFormSubmit = (formValue : any) => {
     this.wareService.post(formValue).subscribe({
       next: () => {
         this.wareListResource.reload();

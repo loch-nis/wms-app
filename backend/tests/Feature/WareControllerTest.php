@@ -60,7 +60,7 @@ class WareControllerTest extends TestCase
         $response = $this->json("POST", "/api/wares", $requestData);
 
         $response->assertStatus(422);
-        
+
         $this->assertEquals(1, Ware::where("barcode", "123ABC")->count());
 
         $this->assertDatabaseCount("wares", 1);
@@ -155,7 +155,7 @@ class WareControllerTest extends TestCase
         ];
 
         $response = $this->json("PATCH", "/api/wares/{$barcode}", $requestData);
-        
+
         $response->assertStatus(422);
 
         $response->assertJsonValidationErrors(["quantityDelta"]);
@@ -166,8 +166,8 @@ class WareControllerTest extends TestCase
         ]);
     }
 
-    
-    // tests for getAll and getByBarcode go here
+
+    // tests for getAll and getByBarcode would go here
 
 
 
@@ -192,11 +192,11 @@ class WareControllerTest extends TestCase
         $response = $this->json("DELETE", "/api/wares/{$barcode}");
 
         $response->assertStatus(200);
-        
+
         $this->assertDatabaseCount("wares", 0);
 
     }
-    
+
 
 
 

@@ -1,6 +1,7 @@
 @if (wareLookupStatus() === "found")
 {
-    <div> <!-- TODO is optional chaining here bad practice? Or can/should I even avoid it?-->
+    <div> <!-- Using optional chaining here as I can guarantee 
+        that the ware is defined when the status is found - not sure if bad practice? -->
         Name: {{ lookedUpWare()?.name }} <br>
         Barcode: {{ lookedUpWare()?.barcode }} <br>
         Price: ${{ lookedUpWare()?.price }} <br>
