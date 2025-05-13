@@ -40,7 +40,7 @@ export class WareManagementContainerComponent {
   lookedUpWareResource = rxResource({
     request: () => this.barcode(),
     loader: ({ request: barcode }) => 
-      this.wareService.getByBarcode(barcode)
+      this.wareService.getByBarcode(barcode) //should probably add debouncing
   });
 
   wareListResource = rxResource({
