@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Ware;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\StoreWareRequest;
 use App\Http\Requests\UpdateWareRequest;
@@ -31,11 +30,11 @@ class WareController extends Controller
     }
 
 
-    public function update(UpdateWareRequest $request, string $barcode) : JsonResponse
+    public function updateQuantity(UpdateWareRequest $request, string $barcode) : JsonResponse
     {
         $validated = $request->validated();
 
-        $ware = $this->wareService->updateWare($validated, $barcode);
+        $ware = $this->wareService->updateQuantity($validated, $barcode);
 
         return response()->json($ware,200);
     }

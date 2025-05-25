@@ -25,7 +25,7 @@ class WareService
     }
 
 
-    public function updateWare(array $validatedData, string $barcode)
+    public function updateQuantity(array $validatedData, string $barcode)
     {
         $ware = Ware::where('barcode', $barcode)->firstOrFail();
 

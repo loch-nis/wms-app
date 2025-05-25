@@ -4,16 +4,23 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WareController;
 
 Route::get('/', function () {
-    return response()->json();
+    return response()->noContent();
 });
 
-Route::post('/api/wares', [WareController::class, 'store']);
+Route::prefix('api/wares')->name('wares.')
+    //->middleware('auth') // todo middleware and login!
+    ->group(function() {
 
-//route for updating the quantity of a ware. Used in both UC1 and UC2
-Route::patch('api/wares/{barcode}', [WareController::class, 'update']);
+    
+    Route::get('/', [WareController::class, 'getAll'])->name('getAll');
+    
+    Route::get('/{barcode}', [WareController::class, 'getByBarcode'])->name('getByBarcode');
+    
+    Route::post('/', [WareController::class, 'store'])->name('store');
+    
+    Route::patch('/{barcode}', [WareController::class, 'updateQuantity'])
+        ->name('updateQuantity');
+    
+    Route::delete('/{barcode}',[WareController::class, 'delete'])->name('destroy');
 
-Route::get('/api/wares', [WareController::class, 'getAll']);
-
-Route::get('/api/wares/{barcode}', [WareController::class, 'getByBarcode']);
-
-Route::delete('/api/wares/{barcode}',[WareController::class, 'delete']);
+});
