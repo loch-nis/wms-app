@@ -17,7 +17,7 @@ export class WareService {
 
   getAll() : Observable<Ware[]>
   {
-    return this.http.get<Ware[]>(`${environment.apiUrl}`).pipe(catchError(error => {
+    return this.http.get<Ware[]>(`${environment.apiUrl}/wares`).pipe(catchError(error => {
       this.notificatonService.showError("Error: failed getting all wares");
       console.error(error);
       return EMPTY;
@@ -26,12 +26,12 @@ export class WareService {
 
   getByBarcode(barcode: string) : Observable<Ware>
   {
-    return this.http.get<Ware>(`${environment.apiUrl}/${barcode}`);
+    return this.http.get<Ware>(`${environment.apiUrl}/wares/${barcode}`);
   }
 
   post(data : any) : Observable<object>
   {
-    return this.http.post(`${environment.apiUrl}`, data).pipe(catchError(error => {
+    return this.http.post(`${environment.apiUrl}/wares`, data).pipe(catchError(error => {
       this.notificatonService.showError("Error: failed creating new ware");
       console.error(error);
       return EMPTY;
@@ -41,7 +41,7 @@ export class WareService {
   patch(barcode: string, quantityDelta : any) : Observable<object>
   {
     const data = { quantityDelta };
-    return this.http.patch(`${environment.apiUrl}/${barcode}`, data).pipe(catchError(error => {
+    return this.http.patch(`${environment.apiUrl}/wares/${barcode}`, data).pipe(catchError(error => {
       if (error.status === 422)
         this.notificatonService.showError("Error: likely quantity too low to process packing order");
       else
@@ -53,7 +53,7 @@ export class WareService {
 
   delete(barcode: string) : Observable<object>
   {
-    return this.http.delete(`${environment.apiUrl}/${barcode}`).pipe(catchError(error => {
+    return this.http.delete(`${environment.apiUrl}/wares/${barcode}`).pipe(catchError(error => {
       this.notificatonService.showError("Error: failed deleting ware");
       console.error(error);
       return EMPTY;

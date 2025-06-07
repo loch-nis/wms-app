@@ -11,7 +11,7 @@ import { WareDeleteButtonPresenterComponent } from "../ware-delete-button-presen
   styleUrl: './ware-list-presenter.component.scss'
 })
 export class WareListPresenterComponent{
-  wares = input<Ware[]>([]);
+  wareList = input<Ware[]>([]);
   submitWareUpdateFunction = input<(action: WareUpdateAction, barcode: string, quantityDelta: number) => void>(() => {});
   submitWareDeleteFunction = input<(barcode: string) => void>(() => {});
 }

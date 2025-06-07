@@ -1,5 +1,5 @@
 <header>
-    <h1 class="text-4xl font-semibold text-gray-800 mb-4 mt-4">Warehouse Overview</h1>
+    <h1 class="text-4xl font-semibold text-gray-800 mb-4 mt-4">Ware Management</h1>
 </header>
 
 <main>
@@ -14,7 +14,7 @@
     </div>
     <div>
         <app-ware-list
-        [wares]="wareList()"
+        [wareList]="wareList()"
         [submitWareUpdateFunction]="handleWareUpdateFormSubmit"
         [submitWareDeleteFunction]="handleWareDeleteSubmit"
         ></app-ware-list>

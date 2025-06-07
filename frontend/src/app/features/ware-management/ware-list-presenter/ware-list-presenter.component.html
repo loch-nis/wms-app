@@ -1,5 +1,5 @@
 <h3 class="text-xl font-semibold text-gray-800 mb-4 mt-4">
-    List of Warehouse Wares:
+    List of wares in warehouse:
 </h3>
 <table class="min-w-full w-3xl table-auto border-collapse bg-white shadow-md">
     <thead class="bg-gray-200">
@@ -13,7 +13,7 @@
         </tr>
     </thead>
     <tbody class="text-m">
-         @for (ware of wares(); track ware.barcode)
+         @for (ware of wareList(); track ware.barcode)
          {
              <tr>
                  <td>{{ ware.name }}</td>

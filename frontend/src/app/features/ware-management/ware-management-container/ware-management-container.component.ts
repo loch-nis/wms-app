@@ -7,7 +7,7 @@ import { Ware, WareUpdateAction, WareLookupStatus } from '../../../core/models/w
 import { NotificationService } from '../../../core/services/notification.service';
 
 @Component({
-  selector: 'app-dashboard',
+  selector: 'app-ware-management',
   imports: [WareListPresenterComponent, WareLookupPresenterComponent],
   templateUrl: './ware-management-container.component.html',
   styleUrl: './ware-management-container.component.scss'

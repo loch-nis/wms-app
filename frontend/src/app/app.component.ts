@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { WareManagementContainerComponent } from "./features/ware-management/ware-management-container/ware-management-container.component";
+import { HeaderPresenterComponent } from './shared/ui/header/header-presenter.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, WareManagementContainerComponent],
+  imports: [RouterOutlet, HeaderPresenterComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
