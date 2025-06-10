@@ -13,76 +13,76 @@ import { NotificationService } from '../../../core/services/notification.service
   styleUrl: './ware-management-container.component.scss'
 })
 export class WareManagementContainerComponent {
-  barcode = signal<string>("");
-  
-  lookedUpWare = computed<Ware | null>(() => {
-    return this.lookedUpWareResource.hasValue() ? this.lookedUpWareResource.value() : null;
-  });
-  
-  wareLookupStatus = computed<WareLookupStatus>(() => {
-    if (this.barcode() === "")
-      return 'notSearched';
-    else if (this.lookedUpWare() === null)
-      return 'notFound';
-    else
-      return 'found';
-  });
+    barcode = signal<string>("");
 
-  wareList = computed<Ware[] | []>(() => {
-    return this.wareListResource.hasValue() ? this.wareListResource.value() : [];
-  });
-
-
-  private wareService = inject(WareService);
-  private notificationService = inject(NotificationService);
-
-  
-  lookedUpWareResource = rxResource({
-    request: () => this.barcode(),
-    loader: ({ request: barcode }) => 
-      this.wareService.getByBarcode(barcode) //should probably add debouncing
-  });
-
-  wareListResource = rxResource({
-    loader: () =>
-      this.wareService.getAll()
-  });
-
-
-
-  handleWareCreateFormSubmit = (formValue : any) => {
-    this.wareService.post(formValue).subscribe({
-      next: () => {
-        this.wareListResource.reload();
-        this.lookedUpWareResource.reload();
-        this.notificationService.showSuccess("New ware successfully created");
-      }
+    lookedUpWare = computed<Ware | null>(() => {
+        return this.lookedUpWareResource.hasValue() ? this.lookedUpWareResource.value() : null;
     });
-  }
+
+    wareLookupStatus = computed<WareLookupStatus>(() => {
+        if (this.barcode() === "")
+            return 'notSearched';
+        else if (this.lookedUpWare() === null)
+            return 'notFound';
+        else
+            return 'found';
+    });
+
+    wareList = computed<Ware[] | []>(() => {
+    return this.wareListResource.hasValue() ? this.wareListResource.value() : [];
+    });
 
 
-  handleWareUpdateFormSubmit = (action: WareUpdateAction, barcode: string, quantityDelta : number) => {
+    private wareService = inject(WareService);
+    private notificationService = inject(NotificationService);
+
+
+    lookedUpWareResource = rxResource({
+    params: () => this.barcode(),
+    stream: ({ params: barcode }) => 
+        this.wareService.getByBarcode(barcode) //should probably add debouncing
+    });
+
+    wareListResource = rxResource({
+    stream: () =>
+        this.wareService.getAll()
+    });
+
+
+
+    handleWareCreateFormSubmit = (formValue : any) => {
+    this.wareService.post(formValue).subscribe({
+        next: () => {
+            this.wareListResource.reload();
+            this.lookedUpWareResource.reload();
+            this.notificationService.showSuccess("New ware successfully created");
+        }
+    });
+    }
+
+
+    handleWareUpdateFormSubmit = (action: WareUpdateAction, barcode: string, quantityDelta : number) => {
     if (action === "decreaseQuantity")
-      quantityDelta *= -1;
-    
+        quantityDelta *= -1;
+
     this.wareService.patch(barcode, quantityDelta).subscribe({
-      next: () => {
-        this.wareListResource.reload();
-        this.lookedUpWareResource.reload();
-        this.notificationService.showSuccess("Ware successfully updated");
+        next: () => {
+            this.wareListResource.reload();
+            this.lookedUpWareResource.reload();
+            this.notificationService.showSuccess("Ware successfully updated");
     }
     });
-  }
+    }
 
-  handleWareDeleteSubmit = (barcode: string) => {
+    handleWareDeleteSubmit = (barcode: string) => {
     this.wareService.delete(barcode).subscribe({
-      next: () => {
-        this.wareListResource.reload();
-        this.lookedUpWareResource.reload();
-        this.notificationService.showSuccess("Ware successfully deleted");
-      }
+        next: () => {
+            this.wareListResource.reload();
+            this.lookedUpWareResource.reload();
+            this.notificationService.showSuccess("Ware successfully deleted");
+        }
     });
-  }
+    }
 
 
 }

@@ -1,11 +1,11 @@
 import { Component, input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { WareUpdateAction } from '../../../../core/models/ware.model';
 
 @Component({
   selector: 'app-update-ware-form',
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule],
   templateUrl: './ware-update-form-presenter.component.html',
   styleUrl: './ware-update-form-presenter.component.scss'
 })

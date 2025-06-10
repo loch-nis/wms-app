@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './features/auth/guards/auth.guard';
 
 export const routes: Routes = [
     {path: '', redirectTo: 'home', pathMatch: 'full'},
@@ -15,7 +16,7 @@ export const routes: Routes = [
     }, 
     {
         path: 'ware-management',
-        // todo: canActivate: [authGuard],
+        canActivate: [authGuard],
         loadComponent: () => 
             import('./features/ware-management')
             .then(c => c.WareManagementContainerComponent),

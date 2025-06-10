@@ -1,78 +1,129 @@
-import { Injectable, signal, computed, inject } from '@angular/core';
+import { Injectable, signal, computed, inject, effect } from '@angular/core';
 import { AuthUser } from './models/auth-user.model';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
+import { tap, throwError } from 'rxjs';
+import { TokenService } from '../../core/services/token.service';
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root'
 })
 export class AuthService {
-  private readonly _authUser = signal<AuthUser | undefined>(undefined);
-  private readonly _loading = signal<boolean>(false);
-  private readonly _loginError = signal<boolean>(false);
+	private readonly _authUser = signal<AuthUser | undefined>(undefined);
+	private readonly _tokenExpiry = signal<number | undefined>(undefined);
 
-  readonly authUser = this._authUser.asReadonly();
-  readonly isLoggedIn = computed(() => this._authUser() !== undefined);
-  readonly isLoading = this._loading.asReadonly();
-  readonly hasLoginError = this._loginError.asReadonly();
+	readonly authUser = this._authUser.asReadonly();
+	readonly isLoggedIn = computed(() => this._authUser() !== undefined);
+	readonly tokenExpiry = this._tokenExpiry.asReadonly();
 
-  private readonly http = inject(HttpClient);
-  private readonly router = inject(Router);
+	private readonly http = inject(HttpClient);
+	private readonly tokenService = inject(TokenService);
 
-  // todo perhaps: "Return Observable instead of subscribing in service" - this fn is not SRP
-  login(email: string, password: string) 
-  {
-    this._loading.set(true);
-    this._loginError.set(false);
+	login(email: string, password: string) {
+		return this.http.post<{access_token: string; expires_in: number, user: AuthUser}>(
+			`${environment.apiUrl}/auth/login`, { email, password }
+		).pipe(
+			tap(response => {
+				this.tokenService.setToken(response.access_token);
+				const tokenExpiry = this.calculateTokenExpiry(response.expires_in);
+				this.tokenService.setTokenExpiry(tokenExpiry);
+				this._tokenExpiry.set(tokenExpiry);
+				this.loadUserFromToken();
+			})
+		);
+	}
 
-    this.http.post<{token: string; user: AuthUser}>
-    (`${environment.apiUrl}/login`, { email, password }).subscribe({
-      next: response => {
-        localStorage.setItem('token', response.token);
-        this._authUser.set(response.user); 
-        this.router.navigateByUrl('ware-management');     
-      },
-      error: () => {
-        this._loginError.set(true);
-      },
-      complete: () => {
-        this._loading.set(false);
-      },
-    })
-  }
+	register(email: string, password: string, firstName: string, lastName: string) {
+		return this.http.post<{}>(
+			`${environment.apiUrl}/auth/register`, { email, password, firstName, lastName }
+		);
+	}
 
-  // todo:
-  register(email: string, password: string, firstName: string, lastName: string)
-  {
-    this._loading.set(true);
-    this._loginError.set(false);
+	logout() {
+		this._authUser.set(undefined);
+		return this.http.post(`${environment.apiUrl}/auth/logout`, {}).pipe(
+			tap(() => {
+				this.tokenService.removeToken();
+				this.tokenService.removeTokenExpiry();
+			})
+		);
+	}
 
-    this.http.post<{}>
-    (`${environment.apiUrl}/register`, { email, password, firstName, lastName })
-      .subscribe({
-      next: () => {
-        this.router.navigateByUrl('login');     
-      },
-      error: () => {
-        this._loginError.set(true);
-      },
-      complete: () => {
-        this._loading.set(false);
-      },
-    })
-  }
+	loadUserFromToken() {
+		if (this.isLoggedIn())
+			return;
 
-  logout() 
-  {
-    localStorage.removeItem('token');
-    this._authUser.set(undefined);
-    this.router.navigateByUrl('auth/login');
-  }
+		const token = this.tokenService.getToken();
+		if (!token) 
+			return;
 
-  loadUser()
-  {
-    // what even is this?? find out
-  }
+		this.http.get<AuthUser>(`${environment.apiUrl}/auth/me`).subscribe({
+			next: user => this._authUser.set(user),
+			error: () => console.warn("Error in the loadUser function"),
+		});
+	}
 
+
+
+	constructor() {
+		const storedTokenExpiry = this.tokenService.getTokenExpiry();
+		if (storedTokenExpiry)
+			this._tokenExpiry.set(storedTokenExpiry);
+	}
+
+
+
+	tokenRefreshEffect = effect(() => {
+		const expiryTimestamp = this._tokenExpiry();
+		if (expiryTimestamp === undefined) 
+			return;
+
+		const isExpired = Date.now() >= expiryTimestamp;
+		if (isExpired) 
+		{
+			this.logout();
+			return;
+		}
+
+		const oneMinuteBuffer = 60_000;
+		const timeout = expiryTimestamp - Date.now() - oneMinuteBuffer;
+
+		const id = setTimeout(() => {
+			this.refreshToken().subscribe({
+				next: response => {
+					this.tokenService.setToken(response.access_token);
+					const tokenExpiry = this.calculateTokenExpiry(response.expires_in);
+					this.tokenService.setTokenExpiry(tokenExpiry);
+					this._tokenExpiry.set(tokenExpiry);
+				},
+				error: () => {
+					console.warn("Token refresh failed unexpectedly");
+					this.logout();
+				},
+			}
+			);
+		}, timeout);
+
+		return () => clearTimeout(id);
+	});
+
+
+	refreshToken() {	
+		const token = this.tokenService.getToken();
+
+		if (!token)
+			return throwError(() => new Error("Cannot refresh token: No token present"));
+
+		return this.http.post<{access_token: string; expires_in: number}>
+			(`${environment.apiUrl}/auth/refresh`, {});
+	}
+
+
+
+	private calculateTokenExpiry(
+		expiresIn: number, 
+		currentTimeInSeconds: number = Date.now()
+	): number {
+		return currentTimeInSeconds + expiresIn * 1000;
+	}
 }

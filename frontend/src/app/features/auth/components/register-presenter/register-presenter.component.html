@@ -28,6 +28,7 @@
             id="email"
             formControlName="email"
             class="mt-2 w-full text-center px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            [class.border-red-500]="registerForm.get('email')?.touched && registerForm.get('email')?.invalid"
             />
         </div>
     

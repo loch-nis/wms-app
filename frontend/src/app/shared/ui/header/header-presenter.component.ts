@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, inject, computed } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import { IconModule } from '../icon';
+import { AuthService } from '../../../features/auth/auth.service';
 
 interface MenuItem {
   link: string;
@@ -25,13 +26,9 @@ interface MenuItem {
   styleUrl: './header-presenter.component.scss'
 })
 export class HeaderPresenterComponent {
-  
-/* 
-  todo login and auth
-   authUser: AuthUser | null | undefined = null;
+  private readonly authService = inject(AuthService); //not sure if this is bad practice?
 
-  todo logout
-  */
+  readonly authUser = this.authService.authUser;
 
   readonly menuItems: MenuItem[] = [
     { link: '/', label: 'Home', icon: 'home' },

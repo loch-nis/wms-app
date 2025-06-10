@@ -1,14 +1,16 @@
 import { HttpInterceptorFn } from "@angular/common/http";
 import { AuthService } from "../auth.service";
-import { throwError, catchError } from "rxjs";
+import { throwError, catchError, EMPTY } from "rxjs";
 import { inject } from "@angular/core";
+import { TokenService } from "../../../core/services/token.service";
 
 
 export const authInterceptor: HttpInterceptorFn = (request, next) => {
 
     const authService = inject(AuthService);
+    const tokenService = inject(TokenService);
 
-    const token = localStorage.getItem('token');
+    const token = tokenService.getToken();
 
     if (token) 
     {
@@ -18,16 +20,21 @@ export const authInterceptor: HttpInterceptorFn = (request, next) => {
             }
         });
     }
+    
     return next(request).pipe(
         catchError((error) => {
 
-            // todo check what that ignoreAPI stuff is about?
+            const ignoreAPIs = ['/auth/'];
+            if (ignoreAPIs.some(api => request.url.includes(api))) 
+            {
+                return throwError(() => error);
+            }
 
             switch (error.status)
             {
                 case 401:
                     authService.logout();
-                    break;
+                    return EMPTY;
                     // could add more error handling here, such as for 403
                 }
             return throwError(() => error);

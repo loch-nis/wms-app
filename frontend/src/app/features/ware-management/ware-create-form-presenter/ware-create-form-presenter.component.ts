@@ -1,12 +1,12 @@
 import { Component, effect, input, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+
 
 
 @Component({
   selector: 'app-create-ware-form',
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule],
   templateUrl: './ware-create-form-presenter.component.html',
   styleUrl: './ware-create-form-presenter.component.scss'
 })
@@ -21,15 +21,13 @@ export class WareCreateFormPresenterComponent{
 
   readonly placementOptions = [1, 2, 3, 4, 5];
 
-  private formBuilder = inject(FormBuilder);
 
-  // todo - dont use formBuilder?
-  form: FormGroup = this.formBuilder.group({
-      barcode: ['', Validators.required],
-      name: ['', Validators.required],
-      price: [null, [Validators.required, Validators.min(0)]],
-      placement_id: [1, Validators.required],
-      quantity: [0, [Validators.required, Validators.min(0)]],
+  form: FormGroup = new FormGroup({
+    barcode: new FormControl('', Validators.required),
+    name: new FormControl('', Validators.required),
+    price: new FormControl(null, [Validators.required, Validators.min(0)]),
+    placement_id: new FormControl(1, Validators.required),
+    quantity: new FormControl(0, [Validators.required, Validators.min(0)]),
     });
 
 

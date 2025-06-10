@@ -1,4 +1,4 @@
-import { Component, input, inject } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
@@ -7,29 +7,27 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
   templateUrl: './login-presenter.component.html',
 })
 export class LoginPresenterComponent {
-  readonly submitFunction = input<(email: string, password: string) => void>(() => {});
+	readonly submitFunction = input<(email: string, password: string) => void>(() => {});
 
+	loginForm: FormGroup = new FormGroup({
+		email: new FormControl('', {
+			validators: Validators.required,
+			nonNullable: true,
+		}),
+		password: new FormControl('', {
+			validators: Validators.required,
+			nonNullable: true,
+		}),
+	});
 
-  loginForm: FormGroup = new FormGroup({
-    email: new FormControl('', {
-      validators: Validators.required,
-      nonNullable: true,
-    }),
-    password: new FormControl('', {
-      validators: Validators.required,
-      nonNullable: true,
-    }),
-  });
+	// could add ui for showing a wrong password error here - using an input signal from authContainer
 
-  // todo add the viewmodel stuff? Or do that in the container instead perhaps??!! - use computed()
+	onSubmit()
+	{
+		if (this.loginForm.invalid) return;
 
-  onSubmit()
-  {
-    if (this.loginForm.invalid) return;
-    
-    const { email, password } = this.loginForm.value;
+		const { email, password } = this.loginForm.value;
 
-    this.submitFunction()(email as string, password as string);
-    
-  }
+		this.submitFunction()(email as string, password as string);
+	}
 }
