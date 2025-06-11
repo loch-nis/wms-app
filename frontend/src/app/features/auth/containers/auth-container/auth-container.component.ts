@@ -4,7 +4,8 @@ import { LoginPresenterComponent } from '../../components/login-presenter/login-
 import { RegisterPresenterComponent } from '../../components/register-presenter/register-presenter.component';
 import { Router } from '@angular/router';
 import { NotificationService } from '../../../../core/services/notification.service';
-import { AuthMode } from '../../models/auth-mode.model';
+import { AuthMode } from '../../models/auth.model';
+import { LoginRequest, RegisterRequest } from '../../models/auth.model';
 
 @Component({
   selector: 'app-auth-container',
@@ -45,8 +46,8 @@ export class AuthContainerComponent {
         
     });
 
-    readonly handleLogin = (email: string, password: string) => {
-        this.authService.login(email, password).subscribe({
+    readonly handleLogin = (credentials: LoginRequest) => {
+        this.authService.login(credentials).subscribe({
             next: () => {
                 this.notification.showSuccess("Login successful");
                 this.router.navigateByUrl('home');
@@ -57,13 +58,8 @@ export class AuthContainerComponent {
         });
     }
 
-    readonly handleRegister = (
-        email: string, 
-        password: string,
-        firstName: string,
-        lastName: string,
-    ) => {
-        this.authService.register(email, password, firstName, lastName).subscribe({
+    readonly handleRegister = (newUser: RegisterRequest) => {
+        this.authService.register(newUser).subscribe({
             next: () => {
                 this.router.navigateByUrl('auth/login');
                 this.notification.showSuccess("Registration successful");

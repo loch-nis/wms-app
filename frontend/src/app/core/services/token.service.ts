@@ -38,5 +38,15 @@ export class TokenService {
 		localStorage.removeItem('token_expiry');
 	}
 
+	removeTokenAndTokenExpiry()
+	{
+		this.removeToken();
+		this.removeTokenExpiry();
+	}
+
+	hasToken(): boolean
+	{
+		return this.getToken() !== null;
+	}
 
 }

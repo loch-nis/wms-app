@@ -1,5 +1,6 @@
 import { Component, input } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { RegisterRequest } from '../../models/auth.model';
 
 @Component({
 	selector: 'app-register-presenter',
@@ -8,10 +9,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 })
 export class RegisterPresenterComponent {
 	readonly submitFunction = input<(
-		email: string, 
-		password: string, 
-		firstName: string, 
-		lastName: string
+		newUser: RegisterRequest
 	) => void>(() => {});
 
 	registerForm: FormGroup = new FormGroup({
@@ -39,14 +37,9 @@ export class RegisterPresenterComponent {
 	{
 		if (this.registerForm.invalid) return;
 		
-		const { email, password, firstName, lastName } = this.registerForm.value;
+		const newUser: RegisterRequest = this.registerForm.value;
 
-		this.submitFunction()(
-			email as string, 
-			password as string, 
-			firstName as string, 
-			lastName as string
-		);
+		this.submitFunction()(newUser);
 	}
 
 }

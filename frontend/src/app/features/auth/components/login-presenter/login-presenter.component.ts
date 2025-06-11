@@ -1,5 +1,6 @@
 import { Component, input } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { LoginRequest } from '../../models/auth.model';
 
 @Component({
   selector: 'app-login-presenter',
@@ -7,7 +8,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
   templateUrl: './login-presenter.component.html',
 })
 export class LoginPresenterComponent {
-	readonly submitFunction = input<(email: string, password: string) => void>(() => {});
+	readonly submitFunction = input<(credentials: LoginRequest) => void>(() => {});
 
 	loginForm: FormGroup = new FormGroup({
 		email: new FormControl('', {
@@ -26,8 +27,8 @@ export class LoginPresenterComponent {
 	{
 		if (this.loginForm.invalid) return;
 
-		const { email, password } = this.loginForm.value;
+		const credentials: LoginRequest = this.loginForm.value;
 
-		this.submitFunction()(email as string, password as string);
+		this.submitFunction()(credentials);
 	}
 }
