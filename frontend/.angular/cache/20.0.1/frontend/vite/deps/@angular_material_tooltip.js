@@ -4,11 +4,7 @@ import {
   createFlexibleConnectedPositionStrategy,
   createOverlayRef,
   createRepositionScrollStrategy
-} from "./chunk-G24734W6.js";
-import {
-  CdkScrollableModule,
-  ScrollDispatcher
-} from "./chunk-PEFPV2XX.js";
+} from "./chunk-2X33JROM.js";
 import {
   A11yModule,
   AriaDescriber,
@@ -19,17 +15,21 @@ import {
   coerceBooleanProperty,
   hasModifierKey,
   normalizePassiveListenerOptions
-} from "./chunk-3P4WIMZG.js";
+} from "./chunk-YJC7GBPV.js";
+import {
+  CdkScrollableModule,
+  ScrollDispatcher
+} from "./chunk-PEFPV2XX.js";
 import {
   Platform,
   coerceNumberProperty
 } from "./chunk-GIAGYS52.js";
 import {
-  NgClass
-} from "./chunk-TU6BMJLN.js";
-import {
   Directionality
 } from "./chunk-WFSWRHRS.js";
+import {
+  NgClass
+} from "./chunk-TU6BMJLN.js";
 import "./chunk-W7ENOTKE.js";
 import {
   ChangeDetectionStrategy,

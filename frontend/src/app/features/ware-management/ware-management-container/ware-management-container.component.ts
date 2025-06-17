@@ -2,7 +2,7 @@ import { Component, signal, inject, computed } from '@angular/core';
 import { WareListPresenterComponent } from '../ware-list-presenter/ware-list-presenter.component';
 import { WareLookupPresenterComponent } from '../ware-lookup-presenter/ware-lookup-presenter.component';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { WareService } from './ware.service';
+import { WareService } from '../ware.service';
 import { Ware, WareUpdateAction, WareLookupStatus } from '../../../core/models/ware.model';
 import { NotificationService } from '../../../core/services/notification.service';
 

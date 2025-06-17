@@ -22,7 +22,6 @@ export interface AuthTokenResponse {
     access_token: string,
     expires_in: number, 
 }
-
 export type LoginResponse = AuthTokenResponse;
 export type RefreshTokenResponse = AuthTokenResponse;
 

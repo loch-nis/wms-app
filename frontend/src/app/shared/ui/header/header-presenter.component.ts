@@ -34,5 +34,6 @@ export class HeaderPresenterComponent {
     { link: '/', label: 'Home', icon: 'home' },
     { link: '/about', label: 'About', icon: 'info-circle' },
     { link: '/ware-management', label: 'Ware Management', icon: 'truck' },
+    { link: '/stats', label: 'Statistics', icon: 'chart-simple' },
   ]; 
 }

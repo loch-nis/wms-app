@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\WareStatsController;
 use Illuminate\Auth\Middleware\RedirectIfAuthenticated;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\WareController;
@@ -27,6 +28,12 @@ Route::prefix('api')->middleware('api')->group(function() {
         Route::delete('/{barcode}',[WareController::class, 'delete'])->name('destroy');
             
     });
+
+    Route::prefix('stats')
+        ->middleware('jwt.auth')
+        ->group(function() {
+            Route::get('', [WareStatsController::class, 'index']);
+        });
 
     Route::prefix('auth')
         ->middleware('api')

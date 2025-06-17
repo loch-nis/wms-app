@@ -21,6 +21,12 @@ export const routes: Routes = [
             import('./features/ware-management')
             .then(c => c.WareManagementContainerComponent),
     },
+    {
+        path: 'stats',
+        canActivate: [authGuard],
+        loadComponent: () => 
+            import('./features/stats').then(c => c.StatsContainerComponent),
+    }, 
     { 
     path: 'auth',
     loadChildren: () => 

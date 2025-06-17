@@ -1,0 +1,54 @@
+<div>
+    <header>
+        <h1 class="text-4xl font-semibold text-gray-800 mb-4 mt-8 text-center">Ware Statistics</h1>
+    </header>
+
+    
+    @if (isChartReady())
+    {
+        @switch (chartType()) {
+            @case ('LINE') {
+                <app-line-chart-presenter
+                [chartSeries]="chartSeries()"
+                [chartXaxis]="chartXaxis()"
+                [chartConfig]="chartConfig()"
+                [chartTitle]="chartTitle()"
+                ></app-line-chart-presenter>
+                
+            }
+            @case ('BAR') {
+                @if (groupBy()) {
+                    <app-bar-chart-presenter
+                    ></app-bar-chart-presenter>
+                    <!-- [chartOptions]="chartOptions()" -->
+                }
+            }
+            @case ('PIE') {
+                @if (groupBy()) {
+                <app-pie-chart-presenter 
+                ></app-pie-chart-presenter>
+                <!-- [chartOptions]="chartOptions()" -->
+                }
+            }
+            @default {
+        
+            }
+        }
+    }
+    
+    <div class="mx-auto max-w-sm p-6 rounded shadow">
+    
+        <div>
+            <app-chart-type-selector [(chartType)]="chartType"></app-chart-type-selector>
+        </div>
+        
+        
+        
+        @if (chartHasGroupByOption()) {
+            <div>
+                <app-group-by-selector [(groupBy)]="groupBy"></app-group-by-selector>
+            </div>
+        }
+        
+    </div> 
+</div>

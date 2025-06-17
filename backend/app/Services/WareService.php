@@ -2,18 +2,10 @@
 namespace App\Services;
 
 use App\Models\Ware;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-//use App\Services\UartService;
-
 
 class WareService
 {
-    private UartService $uartService;
-
-    public function __construct(UartService $uartService)
-    {
-        $this->uartService = $uartService;
-    }
+    public function __construct(private UartService $uartService) {}
 
     public function createWare(array $validatedData)
     {

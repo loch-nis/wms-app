@@ -14,6 +14,7 @@ import {
   faBarcode,
   faSignInAlt,
   faSignOutAlt,
+  faChartSimple,
 } from '@fortawesome/free-solid-svg-icons';
 
 @NgModule({
@@ -37,6 +38,7 @@ export class IconModule {
     faLockOpen,
     faSignInAlt,
     faSignOutAlt,
+    faChartSimple,
   ];
 
   constructor() {

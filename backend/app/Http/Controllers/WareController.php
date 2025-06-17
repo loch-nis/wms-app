@@ -9,17 +9,8 @@ use App\Services\WareService;
 
 class WareController extends Controller
 {
+    public function __construct(private WareService $wareService) {}
 
-    // Constructor Dependency Injection
-    private WareService $wareService;
-
-    public function __construct(WareService $wareService)
-    {
-        $this->wareService = $wareService;
-    }
-
-
-    // Controller Methods
     public function store(StoreWareRequest $request) : JsonResponse
     {
         $validated = $request->validated();

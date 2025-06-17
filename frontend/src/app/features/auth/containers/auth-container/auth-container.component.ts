@@ -18,8 +18,7 @@ export class AuthContainerComponent {
 	private readonly notification = inject(NotificationService);
 
     readonly mode = computed<AuthMode>(() => {
-        switch (this.router.url)
-        {
+        switch (this.router.url) {
             case '/auth/register':
                 return 'register';
             case '/auth/logout':
@@ -31,7 +30,7 @@ export class AuthContainerComponent {
 
     logoutEffect = effect(() => {
         if (this.mode() !== 'logout')
-            return
+            return;
         
         this.authService.logout().subscribe({
             next: () => {
