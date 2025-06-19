@@ -1,31 +1,25 @@
 import { Component, computed, inject, signal } from '@angular/core';
-import { ChartTypeSelectorPresenterComponent } from '../../components/chart-type-selector-presenter/chart-type-selector-presenter.component';
 import { AppChartType, ChartDataPoint } from '../../models/stats.model';
-import { GroupBySelectorPresenterComponent } from '../../components/group-by-selector-presenter/group-by-selector-presenter.component';
+import { SelectorPresenterComponents } from '../../components/presenters';
+import { ChartPresenterComponents } from '../../components/presenters';
 import { attributeLabels, Ware } from '../../../../core/models/ware.model';
-import { LineChartPresenterComponent } from '../../components/line-chart-presenter/line-chart-presenter.component';
-import { BarChartPresenterComponent } from '../../components/bar-chart-presenter/bar-chart-presenter.component';
-import { PieChartPresenterComponent } from '../../components/pie-chart-presenter/pie-chart-presenter.component';
 import { chartLabels } from '../../shared/chart-config';
-import { ApexChart, ApexOptions, ChartType } from 'ng-apexcharts';
+import { ApexChart, ChartType } from 'ng-apexcharts';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { StatsService } from '../../stats.service';
+import { FIRST_MONTH_OF_CURRENT_YEAR, LAST_MONTH_OF_CURRENT_YEAR } from '../../components/month-range-selector-presenter/month-range-selector-presenter.component';
 
 
 @Component({
 	selector: 'app-stats-container',
-	imports: [
-    ChartTypeSelectorPresenterComponent,
-    GroupBySelectorPresenterComponent,
-    LineChartPresenterComponent,
-    BarChartPresenterComponent,
-    PieChartPresenterComponent
-],
+	imports: [SelectorPresenterComponents, ChartPresenterComponents],
 	templateUrl: './stats-container.component.html',
 })
 export class StatsContainerComponent {
 	readonly chartType = signal<AppChartType | undefined>(undefined);
 	readonly groupBy = signal<keyof Ware | undefined>(undefined);
+	readonly startMonth = signal<string>(FIRST_MONTH_OF_CURRENT_YEAR);
+	readonly endMonth = signal<string>(LAST_MONTH_OF_CURRENT_YEAR);
 
 	private readonly chartTypesWithGroupByOption: AppChartType[] = ['BAR', 'PIE'];
 
@@ -34,17 +28,24 @@ export class StatsContainerComponent {
 	readonly chartDataResource = rxResource({
 		params: () => ({
 			chartType: this.chartType() ?? 'LINE',
+			startMonth: this.startMonth(),
+			endMonth: this.endMonth(),
 			groupBy: this.groupBy(),
 		}),
 		stream: ({ params }) =>
 			this.statsService.getStats(params)
 	});
 	
-	// todo remove this raw thing. And perhaps use hasValue check again cos safer.
-	readonly chartData = computed<ChartDataPoint[] | []>(() => {
-		const raw = this.chartDataResource.value()?.result ?? [];
-		return [...raw];
+	readonly chartHasGroupByOption = computed<boolean>(() => {
+		const ct = this.chartType();
+		if (ct === undefined) return false;
+		return this.chartTypesWithGroupByOption.includes(ct);
 	});
+
+
+	readonly chartData = computed<ChartDataPoint[] | []>(() => 
+		this.chartDataResource.hasValue() ? this.chartDataResource.value().result : []
+	);
 
 	readonly chartTitle = computed<ApexTitleSubtitle>(() => {
 		const type = this.chartType();
@@ -58,12 +59,6 @@ export class StatsContainerComponent {
 
 		return { text, align: 'left' };
 
-	});
-
-	readonly chartHasGroupByOption = computed<boolean>(() => {
-		const ct = this.chartType();
-		if (ct === undefined) return false;
-		return this.chartTypesWithGroupByOption.includes(ct);
 	});
 
 
@@ -87,12 +82,5 @@ export class StatsContainerComponent {
 			enabled: false
 		}
 	}));
-
-	// todo perhaps?:
-	/* Move your presenter imports to a grouped alias (if this grows)
-
-	Like ChartPresenterComponents = [LineChartPresenterComponent, BarChart..., ...]
-
-	Not needed now, but useful in scale-ups */
 
 }

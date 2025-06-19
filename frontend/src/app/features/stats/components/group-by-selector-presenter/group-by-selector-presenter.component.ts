@@ -1,5 +1,5 @@
 import { Component, model } from '@angular/core';
-import { allWareAttributes, attributeLabels, Ware, wareAttributes } from '../../../../core/models/ware.model';
+import { attributeLabels, Ware, wareAttributes } from '../../../../core/models/ware.model';
 import { FormsModule } from '@angular/forms';
 
 @Component({

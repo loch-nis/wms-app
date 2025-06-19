@@ -1,6 +1,7 @@
 import { Component, input } from '@angular/core';
-import { ApexOptions, ChartComponent } from 'ng-apexcharts';
-import { defaultChartOptions } from '../../shared/chart-config';
+import { ApexAxisChartSeries, ApexChart, ApexXAxis, ChartComponent } from "ng-apexcharts";
+import { defaultChartConfig, defaultChartGrid, defaultChartSeries, defaultChartStroke, defaultChartTitle, defaultChartXaxis } from '../../shared/chart-config';
+
 
 @Component({
 	selector: 'app-bar-chart-presenter',
@@ -8,5 +9,11 @@ import { defaultChartOptions } from '../../shared/chart-config';
 	templateUrl: './bar-chart-presenter.component.html',
 })
 export class BarChartPresenterComponent {
-	chartOptions = input<ApexOptions>(defaultChartOptions); 
+	readonly chartSeries = input<ApexAxisChartSeries>(defaultChartSeries);
+	readonly chartXaxis = input<ApexXAxis>(defaultChartXaxis);
+	readonly chartConfig = input<ApexChart>(defaultChartConfig);
+	readonly chartTitle = input<ApexTitleSubtitle>(defaultChartTitle);
+
+	readonly chartStroke = defaultChartStroke;
+	readonly chartGrid = defaultChartGrid;
 }

@@ -1,0 +1,25 @@
+<label for="startMonth" class="mb-2 mt-2">From month</label>
+<br>
+<mat-form-field class="w-full">
+  <mat-label>Select start month</mat-label>
+  <input matInput [matDatepicker]="startMonthPicker" [(ngModel)]="_startMonth">
+  <mat-datepicker-toggle matIconSuffix [for]="startMonthPicker"></mat-datepicker-toggle>
+  <mat-datepicker #startMonthPicker
+                  startView="multi-year"
+                  (monthSelected)="setStartMonth($event, startMonthPicker)">
+  </mat-datepicker>
+</mat-form-field>
+
+<br>
+<label for="endMonth" class="mb-2 mt-2">To month</label>
+<br>
+
+<mat-form-field class="w-full">
+  <mat-label>Select end month</mat-label>
+  <input matInput [matDatepicker]="endMonthPicker" [(ngModel)]="_endMonth">
+  <mat-datepicker-toggle matIconSuffix [for]="endMonthPicker"></mat-datepicker-toggle>
+  <mat-datepicker #endMonthPicker
+                  startView="multi-year"
+                  (monthSelected)="setEndMonth($event, endMonthPicker)">
+  </mat-datepicker>
+</mat-form-field>

@@ -45,8 +45,18 @@
         
         
         @if (chartHasGroupByOption()) {
-            <div>
+            <div class="mt-4">
                 <app-group-by-selector [(groupBy)]="groupBy"></app-group-by-selector>
+            </div>
+        }
+
+        @if (chartType()) {
+            <div class="mt-4">
+                <app-month-range-selector
+                [(startMonth)]="startMonth"
+                [(endMonth)]="endMonth"
+                >
+                </app-month-range-selector>
             </div>
         }
         

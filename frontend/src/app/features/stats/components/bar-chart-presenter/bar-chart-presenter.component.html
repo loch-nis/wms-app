@@ -1,10 +1,8 @@
 <apx-chart
-[chart]="chartOptions().chart!" 
-[series]="chartOptions().series!"
-[chart]="chartOptions().chart!"
-[xaxis]="chartOptions().xaxis!"
-[dataLabels]="chartOptions().dataLabels!"
-[title]="chartOptions().title!" 
-[grid]="chartOptions().grid!"
-[stroke]="chartOptions().stroke!"
+[series]="chartSeries()"
+[chart]="chartConfig()"
+[xaxis]="chartXaxis()"
+[title]="chartTitle()" 
+[stroke]="chartStroke"
+[grid]="chartGrid"
 ></apx-chart>

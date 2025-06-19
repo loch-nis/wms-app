@@ -47,38 +47,4 @@ class WareStatsService
     }
 
 
-    // todo fix
-    /* public function getBarChartData(?string $groupBy, array $filters): array
-    {
-        if (!$groupBy) {
-            return []; // or throw validation exception
-        }
-
-        // Step 1: Fetch counts grouped by the requested field
-        $results = DB::table('wares')
-            ->when($filters['begin'], fn($q) =>
-                $q->whereDate('created_at', '>=', $start)
-            )
-            ->when($filters['end'], fn($q) =>
-                $q->whereDate('created_at', '<', $end->copy()->addMonth())
-            )
-            ->selectRaw("`$groupBy` as group_by_value, COUNT(*) as count")
-            ->groupBy('group_by_value')
-            ->pluck('count', 'group_by_value'); // e.g. [3 => 12, 1 => 5]
-
-        // Step 2: Optionally fill in known values with 0
-        // This is optional and depends on whether you want to show all placements
-        // even those with 0 entries in the date range
-        $distinctValues = DB::table('wares')
-            ->distinct()
-            ->orderBy($groupBy)
-            ->pluck($groupBy);
-
-        $filled = $distinctValues->map(fn($value) => [
-            'group_by_value' => $value,
-            'count' => (int) ($results[$value] ?? 0),
-        ]);
-
-        return $filled->toArray();
-    } */
 }

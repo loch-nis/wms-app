@@ -13,25 +13,24 @@ class WareStatsController extends Controller
 
     public function index(Request $request): JsonResponse
     {
-        //todo validation
+        // todo validation
 
+        // todo also refactor for readability
         $chartType = $request->query('chart_type');
         $groupBy = $request->query('group_by');
-        /* $start = $request->query('start');
-        $end = $request->query('end'); */
+        $startMonth = $request->query('start_month');
+        $endMonth = $request->query('end_month');
 
-        // for testing:
-        $start = '2025-01';
-        $end = '2025-12';
+        $startDate = Carbon::createFromFormat('Y-m', $startMonth)->startOfMonth();
+        $endDate = Carbon::createFromFormat('Y-m', $endMonth)->startOfMonth();
 
-        $startDate = Carbon::createFromFormat('Y-m', $start)->startOfMonth();
-        $endDate = Carbon::createFromFormat('Y-m', $end)->startOfMonth();
-
-        // todo make start end optional / or better yet, just give them a default of the current year
+        // todo figure out how to structure these chartData-methods for it to be clean and DRY.
+        // don't really like the feel of this, too hardcoded and chart-specific
         $data = match ($chartType) {
         'LINE' => $this->service->getLineChartData($startDate, $endDate),
         'BAR'  => $this->service->getBarChartData($startDate, $endDate, $groupBy),
-        'PIE'  => $this->service->getPieChartData($startDate, $endDate, $groupBy),
+        /* todo is this even necessary?:
+         'PIE'  => $this->service->getPieChartData($startDate, $endDate, $groupBy), */
         default => [],
     };
 
