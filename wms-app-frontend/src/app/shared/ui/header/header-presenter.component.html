@@ -1,0 +1,58 @@
+<header class="bg-gray-50 shadow-lg py-2.5">
+  <div class="px-6 flex items-center justify-between">
+    <!-- Left side -->
+    <div class="flex items-center space-x-4">
+      <a routerLink="/" class="flex items-center space-x-4">
+        <!-- <img src="/favicon.png" class="h-14 w-14" /> -->
+        <h1 class="text-4xl font-semibold text-gray-800">🐀 Warehouse</h1>
+      </a>
+
+      <div class="border-l border-gray-300 h-14"></div>
+
+      <div class="menu-items flex items-center">
+        @for (item of menuItems; track $index) {
+        <a
+          mat-button
+          [routerLink]="item.link"
+          routerLinkActive="active"
+          #rla="routerLinkActive"
+          [color]="'error'"
+          class="flex items-center"
+        >
+          <fa-icon [icon]="item.icon" />
+          <span class="ml-2">{{ item.label }}</span>
+        </a>
+        }
+      </div>
+    </div>
+
+    <!-- Right side -->
+    <div class="flex items-center space-x-4">
+      @if (authUser() !== undefined) {
+      <h2 class="text-2xl font-semibold text-gray-800">
+        Hello, {{ authUser()?.first_name }} ☀️
+      </h2>
+      <a mat-stroked-button routerLink="/auth/logout" class="flex items-center">
+        <fa-icon [icon]="'sign-out-alt'" />
+        <span class="ml-2">Logout</span>
+      </a>
+      } @else {
+      <a mat-stroked-button routerLink="/auth/login" class="flex items-center">
+        <fa-icon [icon]="'sign-in-alt'" />
+        <span class="ml-2">Login</span>
+      </a>
+
+      <div class="border-l border-gray-300 h-14"></div>
+
+      <a
+        mat-stroked-button
+        routerLink="/auth/register"
+        class="flex items-center"
+      >
+        <fa-icon [icon]="'user'" />
+        <span class="ml-2">Register</span>
+      </a>
+      }
+    </div>
+  </div>
+</header>

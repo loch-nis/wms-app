@@ -1,10 +1,9 @@
 # Warehouse Management System (WMS)
 
-With a Laravel backend and an Angular frontend.
+My first full-stack project.
 
-Serve the frontend with ``ng serve``
+With a Laravel backend and an Angular frontend + Tailwind for styling.
 
+Authentication with ``tymon/jwt-auth``.
 
-And the backend with ``php artisan serve``
-
-Database needs to be migrated with ``php artisan migrate``
+Charts with ``ApexCharts.js``.
