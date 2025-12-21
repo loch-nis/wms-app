@@ -1,0 +1,2 @@
+import{Nb as s,Za as o,tb as n,ub as m,vb as a}from"./chunk-B42WC262.js";import"./chunk-4IDNTCH7.js";var i=class t{static \u0275fac=function(e){return new(e||t)};static \u0275cmp=o({type:t,selectors:[["app-home"]],decls:3,vars:0,consts:[[1,"text-4xl","font-semibold","text-gray-800","mb-4","mt-4","text-center"],["src","iceland.jpg","alt","Iceland",1,"max-w-md","mx-auto","shadow-md","border-2"]],template:function(e,r){e&1&&(n(0,"h2",0),s(1,` Home Page
+`),m(),a(2,"img",1))},encapsulation:2})};export{i as HomeComponent};

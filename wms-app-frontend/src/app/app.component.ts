@@ -6,7 +6,6 @@ import { HeaderPresenterComponent } from './shared/ui/header/header-presenter.co
   selector: 'app-root',
   imports: [RouterOutlet, HeaderPresenterComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
 })
 export class AppComponent {
   title = 'frontend';

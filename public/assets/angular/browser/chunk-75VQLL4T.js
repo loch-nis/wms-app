@@ -1,0 +1,2 @@
+import{Nb as o,Za as n,tb as i,ub as s}from"./chunk-B42WC262.js";import"./chunk-4IDNTCH7.js";var a=class t{static \u0275fac=function(e){return new(e||t)};static \u0275cmp=n({type:t,selectors:[["app-hike-details-presenter"]],decls:2,vars:0,consts:[[1,"text-center","mt-10","font-bold","text-xl"]],template:function(e,l){e&1&&(i(0,"p",0),o(1,` Decided to build this in React instead, so I'm all in on learning that these days.
+`),s())},encapsulation:2})};export{a as HikeDetailsPresenterComponent};

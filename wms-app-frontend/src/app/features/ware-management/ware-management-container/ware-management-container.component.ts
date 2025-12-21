@@ -3,86 +3,107 @@ import { WareListPresenterComponent } from '../ware-list-presenter/ware-list-pre
 import { WareLookupPresenterComponent } from '../ware-lookup-presenter/ware-lookup-presenter.component';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { WareService } from '../ware.service';
-import { Ware, WareUpdateAction, WareLookupStatus } from '../../../core/models/ware.model';
+import {
+  Ware,
+  WareUpdateAction,
+  WareLookupStatus,
+} from '../../../core/models/ware.model';
 import { NotificationService } from '../../../core/services/notification.service';
+import { tap } from 'rxjs';
 
 @Component({
   selector: 'app-ware-management',
   imports: [WareListPresenterComponent, WareLookupPresenterComponent],
   templateUrl: './ware-management-container.component.html',
-  styleUrl: './ware-management-container.component.scss'
+  styleUrl: './ware-management-container.component.scss',
 })
 export class WareManagementContainerComponent {
-    barcode = signal<string>("");
+  barcode = signal<string>('');
 
-    lookedUpWare = computed<Ware | null>(() => {
-        return this.lookedUpWareResource.hasValue() ? this.lookedUpWareResource.value() : null;
-    });
+  lookedUpWare = computed<Ware | null>(() => {
+    return this.lookedUpWareResource.hasValue()
+      ? this.lookedUpWareResource.value()
+      : null;
+  });
 
-    wareLookupStatus = computed<WareLookupStatus>(() => {
-        if (this.barcode() === "")
-            return 'notSearched';
-        else if (this.lookedUpWare() === null)
-            return 'notFound';
-        else
-            return 'found';
-    });
+  wareLookupStatus = computed<WareLookupStatus>(() => {
+    if (this.barcode() === '') return 'notSearched';
+    else if (this.lookedUpWare() === null) return 'notFound';
+    else return 'found';
+  });
 
-    wareList = computed<Ware[] | []>(() => {
-        return this.wareListResource.hasValue() ? this.wareListResource.value() : [];
-    });
+  wareList = computed<Ware[] | []>(() => {
+    return this.wareListResource.hasValue()
+      ? this.wareListResource.value()
+      : [];
+  });
 
+  private wareService = inject(WareService);
+  private notificationService = inject(NotificationService);
 
-    private wareService = inject(WareService);
-    private notificationService = inject(NotificationService);
-
-
-    lookedUpWareResource = rxResource({
+  lookedUpWareResource = rxResource({
     params: () => this.barcode(),
-    stream: ({ params: barcode }) => 
-        this.wareService.getByBarcode(barcode) //should probably add debouncing
-    });
+    stream: ({ params: barcode }) => this.wareService.getByBarcode(barcode),
+    // could add debouncing
+  });
 
-    wareListResource = rxResource({
+  wareListResource = rxResource({
     stream: () =>
-        this.wareService.getAll()
-    });
+      this.wareService.getAll().pipe(
+        tap({
+          error: () =>
+            this.notificationService.showError(
+              'Error: failed getting all wares'
+            ),
+        })
+      ),
+  });
 
-
-
-    handleWareCreateFormSubmit = (formValue : any) => {
+  handleWareCreateFormSubmit = (formValue: any) => {
     this.wareService.post(formValue).subscribe({
-        next: () => {
-            this.wareListResource.reload();
-            this.lookedUpWareResource.reload();
-            this.notificationService.showSuccess("New ware successfully created");
-        }
+      next: () => {
+        this.wareListResource.reload();
+        this.lookedUpWareResource.reload();
+        this.notificationService.showSuccess('New ware successfully created');
+      },
+      error: () => {
+        this.notificationService.showError('Error: failed creating new ware');
+      },
     });
-    }
+  };
 
-
-    handleWareUpdateFormSubmit = (action: WareUpdateAction, barcode: string, quantityDelta : number) => {
-    if (action === "decreaseQuantity")
-        quantityDelta *= -1;
+  handleWareUpdateFormSubmit = (
+    action: WareUpdateAction,
+    barcode: string,
+    quantityDelta: number
+  ) => {
+    if (action === 'decreaseQuantity') quantityDelta *= -1;
 
     this.wareService.patch(barcode, quantityDelta).subscribe({
-        next: () => {
-            this.wareListResource.reload();
-            this.lookedUpWareResource.reload();
-            this.notificationService.showSuccess("Ware successfully updated");
-    }
+      next: () => {
+        this.wareListResource.reload();
+        this.lookedUpWareResource.reload();
+        this.notificationService.showSuccess('Ware successfully updated');
+      },
+      error: (error) => {
+        if (error.status === 422)
+          this.notificationService.showError(
+            'Error: likely quantity too low to process packing order'
+          );
+        else this.notificationService.showError('Error: failed updating ware');
+      },
     });
-    }
+  };
 
-    handleWareDeleteSubmit = (barcode: string) => {
+  handleWareDeleteSubmit = (barcode: string) => {
     this.wareService.delete(barcode).subscribe({
-        next: () => {
-            this.wareListResource.reload();
-            this.lookedUpWareResource.reload();
-            this.notificationService.showSuccess("Ware successfully deleted");
-        }
+      next: () => {
+        this.wareListResource.reload();
+        this.lookedUpWareResource.reload();
+        this.notificationService.showSuccess('Ware successfully deleted');
+      },
+      error: () =>
+        this.notificationService.showError('Error: failed deleting ware'),
     });
-    }
-
-
+  };
 }

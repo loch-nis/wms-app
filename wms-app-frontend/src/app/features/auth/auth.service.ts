@@ -1,18 +1,10 @@
 import { Injectable, signal, computed, inject, effect } from '@angular/core';
-import {
-  AuthTokenResponse,
-  AuthUser,
-  RefreshTokenResponse,
-} from './models/auth.model';
+import { TokenResponse, AuthUser } from './models/auth.model';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { tap, throwError } from 'rxjs';
 import { TokenService } from '../../core/services/token.service';
-import {
-  LoginRequest,
-  LoginResponse,
-  RegisterRequest,
-} from './models/auth.model';
+import { LoginRequest, RegisterRequest } from './models/auth.model';
 
 @Injectable({
   providedIn: 'root',
@@ -35,16 +27,16 @@ export class AuthService {
 
   login(request: LoginRequest) {
     return this.http
-      .post<LoginResponse>(`${environment.apiUrl}/auth/login`, request)
-      .pipe(tap((response) => this.handleLoginResponse(response)));
+      .post<TokenResponse>(`${environment.apiUrl}/auth/login`, request)
+      .pipe(
+        tap((response) => {
+          this.setTokenAndTokenExpiry(response);
+          this.loadUserFromToken();
+        }),
+      );
   }
 
-  private handleLoginResponse(response: LoginResponse) {
-    this.setTokenAndTokenExpiry(response);
-    this.loadUserFromToken();
-  }
-
-  private setTokenAndTokenExpiry(response: AuthTokenResponse) {
+  private setTokenAndTokenExpiry(response: TokenResponse) {
     this.tokenService.setToken(response.access_token);
     const tokenExpiry = this.calculateTokenExpiry(response.expires_in);
     this.tokenService.setTokenExpiry(tokenExpiry);
@@ -53,7 +45,7 @@ export class AuthService {
 
   private calculateTokenExpiry(
     expiresIn: number,
-    currentTimeInMs: number = Date.now()
+    currentTimeInMs: number = Date.now(),
   ): number {
     return currentTimeInMs + expiresIn * 1000;
   }
@@ -124,12 +116,12 @@ export class AuthService {
   refreshToken() {
     if (!this.tokenService.hasToken())
       return throwError(
-        () => new Error('Cannot refresh token: No token present')
+        () => new Error('Cannot refresh token: No token present'),
       );
 
-    return this.http.post<RefreshTokenResponse>(
+    return this.http.post<TokenResponse>(
       `${environment.apiUrl}/auth/refresh`,
-      {}
+      {},
     );
   }
 }

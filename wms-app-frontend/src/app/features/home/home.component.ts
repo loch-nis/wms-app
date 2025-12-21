@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-home',
-  imports: [],
+  imports: [MatSlideToggleModule, MatFormFieldModule],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.scss'
 })
-export class HomeComponent {
-
-}
+export class HomeComponent {}

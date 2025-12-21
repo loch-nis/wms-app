@@ -13,60 +13,59 @@ import { LoginRequest, RegisterRequest } from '../../models/auth.model';
   templateUrl: './auth-container.component.html',
 })
 export class AuthContainerComponent {
-    private authService = inject(AuthService);
-    private router = inject(Router);
-	private readonly notification = inject(NotificationService);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  private readonly notification = inject(NotificationService);
 
-    readonly mode = computed<AuthMode>(() => {
-        switch (this.router.url) {
-            case '/auth/register':
-                return 'register';
-            case '/auth/logout':
-                return 'logout';
-            default:
-                return 'login';
+  readonly mode = computed<AuthMode>(() => {
+    switch (this.router.url) {
+      case '/auth/register':
+        return 'register';
+      case '/auth/logout':
+        return 'logout';
+      default:
+        return 'login';
+    }
+  });
+
+  logoutEffect = effect(() => {
+    if (this.mode() !== 'logout') return;
+
+    this.authService.logout().subscribe({
+      next: () => {
+        this.notification.showSuccess('Logout successful');
+        this.router.navigateByUrl('auth/login');
+      },
+      error: () => {
+        console.warn('Error posting to logout endpoint');
+        this.router.navigateByUrl('auth/login');
+      },
+    });
+  });
+
+  readonly handleLogin = (credentials: LoginRequest) => {
+    this.authService.login(credentials).subscribe({
+      next: () => {
+        this.notification.showSuccess('Login successful');
+        this.router.navigateByUrl('home');
+      },
+      error: (error) => {
+        if (error.status === 401) {
+          this.notification.showError('Login failed, wrong password or email');
         }
+      },
     });
+  };
 
-    logoutEffect = effect(() => {
-        if (this.mode() !== 'logout')
-            return;
-        
-        this.authService.logout().subscribe({
-            next: () => {
-                this.notification.showSuccess("Logout successful");
-                this.router.navigateByUrl('auth/login');
-            },
-            error: () => {
-                console.warn("Error posting to logout endpoint");
-                this.router.navigateByUrl('auth/login');
-            },
-        });
-        
+  readonly handleRegister = (newUser: RegisterRequest) => {
+    this.authService.register(newUser).subscribe({
+      next: () => {
+        this.router.navigateByUrl('auth/login');
+        this.notification.showSuccess('Registration successful');
+      },
+      error: () => {
+        this.notification.showError('Registration failed');
+      },
     });
-
-    readonly handleLogin = (credentials: LoginRequest) => {
-        this.authService.login(credentials).subscribe({
-            next: () => {
-                this.notification.showSuccess("Login successful");
-                this.router.navigateByUrl('home');
-            },
-            error: () => {
-                this.notification.showError("Login failed");
-            },
-        });
-    }
-
-    readonly handleRegister = (newUser: RegisterRequest) => {
-        this.authService.register(newUser).subscribe({
-            next: () => {
-                this.router.navigateByUrl('auth/login');
-                this.notification.showSuccess("Registration successful");
-            },
-            error: () => {
-                this.notification.showError("Registration failed");
-            },
-        });
-    }
-
+  };
 }

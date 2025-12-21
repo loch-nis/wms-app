@@ -15,18 +15,18 @@ interface MenuItem {
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink,
-    RouterLinkActive, 
+  imports: [
+    RouterLink,
+    RouterLinkActive,
     MatButtonModule,
     MatMenuModule,
     MatTooltipModule,
-    IconModule
+    IconModule,
   ],
   templateUrl: './header-presenter.component.html',
-  styleUrl: './header-presenter.component.scss'
 })
 export class HeaderPresenterComponent {
-  private readonly authService = inject(AuthService); //not sure if this is bad practice?
+  private readonly authService = inject(AuthService);
 
   readonly authUser = this.authService.authUser;
 
@@ -36,5 +36,5 @@ export class HeaderPresenterComponent {
     { link: '/ware-management', label: 'Ware Management', icon: 'truck' },
     { link: '/stats', label: 'Statistics', icon: 'chart-simple' },
     { link: '/hike-planner', label: 'Hike Planner', icon: 'tree' },
-  ]; 
+  ];
 }

@@ -1,6 +1,6 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { AuthService } from '../auth.service';
-import { throwError, catchError, EMPTY } from 'rxjs';
+import { throwError, catchError } from 'rxjs';
 import { inject } from '@angular/core';
 import { TokenService } from '../../../core/services/token.service';
 
@@ -28,7 +28,7 @@ export const authInterceptor: HttpInterceptorFn = (request, next) => {
       switch (error.status) {
         case 401:
           authService.logout();
-          return EMPTY;
+          return throwError(() => error);
         // could add more error handling here, such as for 403
       }
       return throwError(() => error);

@@ -1,0 +1,1 @@
+import"./chunk-4IDNTCH7.js";var t=[{path:":id",loadComponent:()=>import("./chunk-75VQLL4T.js").then(o=>o.HikeDetailsPresenterComponent)},{path:"",loadComponent:()=>import("./chunk-NKUNUJK6.js").then(o=>o.HikePlannerContainerComponent)}];export{t as hikePlannerRoutes};

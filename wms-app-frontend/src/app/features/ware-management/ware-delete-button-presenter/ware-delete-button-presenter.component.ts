@@ -5,14 +5,12 @@ import { FormsModule } from '@angular/forms';
   selector: 'app-ware-delete-button',
   imports: [FormsModule],
   templateUrl: './ware-delete-button-presenter.component.html',
-  styleUrl: './ware-delete-button-presenter.component.scss'
 })
 export class WareDeleteButtonPresenterComponent {
-  barcode = input<string>("");
+  barcode = input<string>('');
   submitFunction = input<(barcode: string) => void>(() => {});
 
-  onSubmit()
-  {
+  onSubmit() {
     this.submitFunction()(this.barcode());
   }
 }

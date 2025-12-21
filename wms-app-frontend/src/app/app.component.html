@@ -1,9 +1,7 @@
-<div class="content">
-    <app-header></app-header>
-    
-    <div class="main-content">
-        <main>
-            <router-outlet></router-outlet>
-        </main>
-    </div>
+<div class="grid h-screen grid-rows-[auto_1fr]">
+  <app-header></app-header>
+
+  <main class="overflow-y-auto">
+    <router-outlet></router-outlet>
+  </main>
 </div>

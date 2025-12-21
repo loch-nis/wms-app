@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["src/app/features/ware-management/ware-item-presenter/ware-item-presenter.component.scss", "src/app/features/ware-management/ware-item-presenter/ware-item-presenter.component.scss"],
+  "sourcesContent": ["th,td {\n    padding: 10px;\n    border: 1px solid #333;\n    }", "th, td {\n  padding: 10px;\n  border: 1px solid #333;\n}\n/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJmaWxlOi8vL1VzZXJzL25pcy9Eb2N1bWVudHMvR2l0L3dtcy1hcHAvd21zLWFwcC1mcm9udGVuZC9zcmMvYXBwL2ZlYXR1cmVzL3dhcmUtbWFuYWdlbWVudC93YXJlLWl0ZW0tcHJlc2VudGVyL3dhcmUtaXRlbS1wcmVzZW50ZXIuY29tcG9uZW50LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDSTtFQUNBIiwic291cmNlc0NvbnRlbnQiOlsidGgsdGQge1xuICAgIHBhZGRpbmc6IDEwcHg7XG4gICAgYm9yZGVyOiAxcHggc29saWQgIzMzMztcbiAgICB9Il19 */"],
+  "mappings": ";AAAA;AAAA;AACI,WAAA;AACA,UAAA,IAAA,MAAA;ACCJ;",
+  "names": []
+}

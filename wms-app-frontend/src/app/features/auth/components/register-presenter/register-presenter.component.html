@@ -1,53 +1,51 @@
-<div class="form-container max-w-lg mx-auto p-6 bg-white rounded-lg shadow-md mb-2">
-    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-  
-        <div class="form-field mb-1">
-            <label for="first_name">First name:</label>
-            <input
-            type="text"
-            id="first_name"
-            formControlName="first_name"
-            class="mt-2 w-full text-center px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-        </div>
-
-        <div class="form-field mb-1">
-            <label for="last_name">Last name:</label>
-            <input
-            type="text"
-            id="last_name"
-            formControlName="last_name"
-            class="mt-2 w-full text-center px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-        </div>
-
-        <div class="form-field mb-1">
-            <label for="email">Email:</label>
-            <input
-            type="email"
-            id="email"
-            formControlName="email"
-            class="mt-2 w-full text-center px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            [class.border-red-500]="registerForm.get('email')?.touched && registerForm.get('email')?.invalid"
-            />
-        </div>
-    
-        <div class="form-field mb-1">
-            <label for="password">Password:</label>
-            <input
-            type="password"
-            id="password"
-            formControlName="password"
-            class="mt-2 w-full text-center px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-        </div>
-      
-  
-      <button type="submit"
-      class="w-full mt-2 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition ease-in-out duration-150"
-      >
-        Register
-      </button>
-    </form>
+<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+  <div class="form-field mb-1">
+    <label for="first_name">First name:</label>
+    <input
+      type="text"
+      id="first_name"
+      formControlName="first_name"
+      class="mt-2 w-full rounded-md border border-gray-300 px-2 py-1 text-center focus:ring-2 focus:ring-blue-500 focus:outline-none"
+    />
   </div>
-  
+
+  <div class="form-field mb-1">
+    <label for="last_name">Last name:</label>
+    <input
+      type="text"
+      id="last_name"
+      formControlName="last_name"
+      class="mt-2 w-full rounded-md border border-gray-300 px-2 py-1 text-center focus:ring-2 focus:ring-blue-500 focus:outline-none"
+    />
+  </div>
+
+  <div class="form-field mb-1">
+    <label for="email">Email:</label>
+    <input
+      type="email"
+      id="email"
+      formControlName="email"
+      class="mt-2 w-full rounded-md border border-gray-300 px-2 py-1 text-center focus:ring-2 focus:ring-blue-500 focus:outline-none"
+      [class.border-red-500]="
+        registerForm.get('email')?.touched && registerForm.get('email')?.invalid
+      "
+    />
+  </div>
+
+  <div class="form-field mb-1">
+    <label for="password">Password:</label>
+    <input
+      type="password"
+      id="password"
+      formControlName="password"
+      class="mt-2 w-full rounded-md border border-gray-300 px-2 py-1 text-center focus:ring-2 focus:ring-blue-500 focus:outline-none"
+    />
+  </div>
+
+  <button
+    type="submit"
+    class="mt-2 w-full rounded-lg bg-blue-600 py-2 font-semibold text-white transition duration-150 ease-in-out hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+  >
+    Register
+  </button>
+</form>

@@ -7,18 +7,17 @@ import { WareUpdateAction } from '../../../../core/models/ware.model';
   selector: 'app-update-ware-form',
   imports: [FormsModule],
   templateUrl: './ware-update-form-presenter.component.html',
-  styleUrl: './ware-update-form-presenter.component.scss'
 })
 export class WareUpdateFormPresenterComponent {
-  barcode = input<string>("");
-  action = input<WareUpdateAction>("increaseQuantity");
-  submitFunction = input<(action: WareUpdateAction, barcode: string, quantityDelta: number) => void>(() => {});
+  barcode = input<string>('');
+  action = input<WareUpdateAction>('increaseQuantity');
+  submitFunction = input<
+    (action: WareUpdateAction, barcode: string, quantityDelta: number) => void
+  >(() => {});
 
   quantityDelta = 1;
-  
-  onSubmit()
-  {
+
+  onSubmit() {
     this.submitFunction()(this.action(), this.barcode(), this.quantityDelta);
   }
-
 }

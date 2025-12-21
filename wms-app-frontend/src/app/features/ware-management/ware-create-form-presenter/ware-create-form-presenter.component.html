@@ -1,66 +1,68 @@
-<div class="form-container max-w-lg mx-auto p-6 bg-white rounded-lg shadow-md mb-2">
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-  
-      <div class="form-field mb-1">
-        <label for="barcode">Barcode:</label>
-        <input
-          type="text"
-          id="barcode"
-          formControlName="barcode"
-          class="mt-2 w-full text-center px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
-  
-      <div class="form-field mb-1">
-        <label for="name">Name:</label>
-        <input
-          type="text"
-          id="name"
-          formControlName="name"
-          class="mt-2 w-full text-center px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
-  
-      <div class="form-field mb-1">
-        <label for="price">Price:</label>
-        <input
-          type="number"
-          id="price"
-          formControlName="price"
-          step="0.1"
-          class="mt-2 w-full text-center px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
-  
-      <div class="form-field mb-1">
-        <label for="placement_id">Placement:</label>
-        <select id="placement_id" formControlName="placement_id"
-          class="mt-2 w-full text-center px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-        <option value="" disabled>Select placement</option>
-         @for (p of placementOptions; track p)
-         {
-           <option [value]="p">{{ p }}</option>
-         }
-        </select>
-      </div>
-  
-      <div class="form-field mb-1">
-        <label for="quantity">Quantity:</label>
-        <input
-          type="number"
-          id="quantity"
-          formControlName="quantity"
-          min="0"
-          class="mt-2 w-full text-center px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-      </div>
-  
-      <button type="submit"
-      class="w-full mt-2 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition ease-in-out duration-150"
+<div
+  class="form-container mx-auto mb-2 max-w-lg rounded-lg bg-white p-6 shadow-md"
+>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-field mb-1">
+      <label for="barcode">Barcode:</label>
+      <input
+        type="text"
+        id="barcode"
+        formControlName="barcode"
+        class="mt-2 w-full rounded-md border border-gray-300 px-2 py-1 text-center focus:ring-2 focus:ring-blue-500 focus:outline-none"
+      />
+    </div>
+
+    <div class="form-field mb-1">
+      <label for="name">Name:</label>
+      <input
+        type="text"
+        id="name"
+        formControlName="name"
+        class="mt-2 w-full rounded-md border border-gray-300 px-2 py-1 text-center focus:ring-2 focus:ring-blue-500 focus:outline-none"
+      />
+    </div>
+
+    <div class="form-field mb-1">
+      <label for="price">Price:</label>
+      <input
+        type="number"
+        id="price"
+        formControlName="price"
+        step="0.1"
+        class="mt-2 w-full rounded-md border border-gray-300 px-2 py-1 text-center focus:ring-2 focus:ring-blue-500 focus:outline-none"
+      />
+    </div>
+
+    <div class="form-field mb-1">
+      <label for="placement_id">Placement:</label>
+      <select
+        id="placement_id"
+        formControlName="placement_id"
+        class="mt-2 w-full rounded-md border border-gray-300 px-2 py-1 text-center focus:ring-2 focus:ring-blue-500 focus:outline-none"
       >
-        Create ware
-      </button>
-    </form>
-  </div>
-  
+        <option value="" disabled>Select placement</option>
+        @for (p of placementOptions; track p) {
+          <option [value]="p">{{ p }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="form-field mb-1">
+      <label for="quantity">Quantity:</label>
+      <input
+        type="number"
+        id="quantity"
+        formControlName="quantity"
+        min="0"
+        class="mt-2 w-full rounded-md border border-gray-300 px-2 py-1 text-center focus:ring-2 focus:ring-blue-500 focus:outline-none"
+      />
+    </div>
+
+    <button
+      type="submit"
+      class="mt-2 w-full rounded-lg bg-blue-600 py-2 font-semibold text-white transition duration-150 ease-in-out hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+    >
+      Create ware
+    </button>
+  </form>
+</div>

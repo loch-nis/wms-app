@@ -1,23 +1,24 @@
 <header>
-    <h1 class="text-4xl font-semibold text-gray-800 mb-4 mt-4">Ware Management</h1>
+  <h1 class="mt-4 mb-4 text-4xl font-semibold text-gray-800">
+    Ware Management
+  </h1>
 </header>
 
 <main>
-    <div class="flex">
-        <app-ware-lookup
-        [(barcode)]="barcode"
-        [lookedUpWare]="lookedUpWare()"
-        [wareLookupStatus]="wareLookupStatus()"
-        [submitWareCreateFunction]="handleWareCreateFormSubmit"
-        [submitWareUpdateFunction]="handleWareUpdateFormSubmit"
-        ></app-ware-lookup>   
-    </div>
-    <div>
-        <app-ware-list
-        [wareList]="wareList()"
-        [submitWareUpdateFunction]="handleWareUpdateFormSubmit"
-        [submitWareDeleteFunction]="handleWareDeleteSubmit"
-        ></app-ware-list>
-    </div>
-    
+  <div class="flex">
+    <app-ware-lookup
+      [(barcode)]="barcode"
+      [lookedUpWare]="lookedUpWare()"
+      [wareLookupStatus]="wareLookupStatus()"
+      [submitWareCreateFunction]="handleWareCreateFormSubmit"
+      [submitWareUpdateFunction]="handleWareUpdateFormSubmit"
+    ></app-ware-lookup>
+  </div>
+  <div>
+    <app-ware-list
+      [wareList]="wareList()"
+      [submitWareUpdateFunction]="handleWareUpdateFormSubmit"
+      [submitWareDeleteFunction]="handleWareDeleteSubmit"
+    ></app-ware-list>
+  </div>
 </main>
