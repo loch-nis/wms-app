@@ -1,42 +1,70 @@
-import { Component, effect, input } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ReactiveFormsModule } from '@angular/forms';
-
-interface WareFormModel {
-  barcode: string;
-  name: string;
-  price: number | null;
-  placement_id: number | null;
-  quantity: number;
-}
+import { Component, effect, input, output } from '@angular/core';
+import { FormsModule, NgForm } from '@angular/forms';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { WareCreateFormModel } from '../../../core/models/ware.model';
 
 @Component({
   selector: 'app-create-ware-form',
-  imports: [ReactiveFormsModule],
+  imports: [
+    FormsModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatCardModule,
+  ],
   templateUrl: './ware-create-form-presenter.component.html',
 })
 export class WareCreateFormPresenterComponent {
   barcode = input<string>('');
   submitFunction = input<(formValue: any) => void>(() => {});
   syncBarcodeField = effect(() => {
-    this.form.patchValue({
-      barcode: this.barcode(),
-    });
+    this.model.barcode = this.barcode();
   });
+
+  model: WareCreateFormModel = {
+    barcode: '',
+    name: '',
+    inventory: {
+      price: 0,
+      quantity: 0,
+    },
+    placement_id: 1,
+  };
 
   readonly placementOptions = [1, 2, 3, 4, 5];
 
-  form: FormGroup = new FormGroup({
-    barcode: new FormControl('', Validators.required),
-    name: new FormControl('', Validators.required),
-    price: new FormControl(null, [Validators.required, Validators.min(0)]),
-    placement_id: new FormControl(1, Validators.required),
-    quantity: new FormControl(0, [Validators.required, Validators.min(0)]),
-  });
+  onSubmit(form: NgForm) {
+    if (form.invalid) return;
 
-  onSubmit() {
-    if (this.form.invalid) return;
-
-    this.submitFunction()(this.form.value);
+    this.submitFunction()(this.model);
   }
 }
+
+// todo - it would still work without the ngModelGroup BUT it enables two things:
+/* 
+What ngModelGroup actually does for you:
+
+    Logical Grouping in form.value:
+
+        With ngModelGroup: The NgForm.value (the form's internal state) will automatically structure itself as { inventory: { price: 10, quantity: 5 } }.
+
+        Without it: If you just used name="price", the form might try to flatten it or get confused about where price belongs in its own internal map of controls, even if your local model object is nested.
+
+    Group Validation Status (valid, touched, dirty):
+
+        This is the big one. ngModelGroup allows you to check the status of just that section.
+
+        Example: You can show an error message for the whole inventory section:
+        HTML
+
+<div ngModelGroup="inventory" #invGroup="ngModelGroup">
+   </div>
+<div *ngIf="invGroup.invalid">Please fix inventory errors</div>
+
+Without it: You have no way to say "Is the inventory section valid?". You would have to check price.invalid || quantity.invalid manually.
+*/

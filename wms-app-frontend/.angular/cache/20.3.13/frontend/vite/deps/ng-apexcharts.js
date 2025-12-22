@@ -1,6 +1,6 @@
 import {
   isPlatformBrowser
-} from "./chunk-EES5A4T2.js";
+} from "./chunk-GEEONUMI.js";
 import "./chunk-CYIUJTKM.js";
 import {
   ChangeDetectionStrategy,

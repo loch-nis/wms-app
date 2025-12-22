@@ -1,5 +1,5 @@
 <div>
-  <h3 class="text-xl font-semibold text-gray-800 mb-4 mt-4">
+  <h3 class="mt-4 mb-4 text-xl font-semibold text-gray-800">
     <fa-icon icon="barcode"></fa-icon>
     Look up barcode
     <fa-icon icon="barcode"></fa-icon>
@@ -10,30 +10,32 @@
 
 <div>
   @if (wareLookupStatus() === "notSearched") {
-  <div class="mb-4 mt-4">Scan or type in a barcode above to look up it up.</div>
+    <div class="mt-4 mb-4">
+      Scan or type in a barcode above to look up it up.
+    </div>
   } @else if (wareLookupStatus() === "found") {
-  <h3 class="text-xl font-semibold text-gray-800 mb-4 mt-4">Ware found:</h3>
+    <h3 class="mt-4 mb-4 text-xl font-semibold text-gray-800">Ware found:</h3>
 
-  <app-ware-item
-    [lookedUpWare]="lookedUpWare()"
-    [wareLookupStatus]="wareLookupStatus()"
-  ></app-ware-item>
+    <app-ware-item
+      [lookedUpWare]="lookedUpWare()"
+      [wareLookupStatus]="wareLookupStatus()"
+    ></app-ware-item>
 
-  <h4 class="text-xl font-semibold mb-4 mt-2">Number of wares to store:</h4>
+    <h4 class="mt-2 mb-4 text-xl font-semibold">Number of wares to store:</h4>
 
-  <app-update-ware-form
-    [action]="'increaseQuantity'"
-    [barcode]="barcode()"
-    [submitFunction]="submitWareUpdateFunction()"
-  ></app-update-ware-form>
+    <app-update-ware-form
+      [action]="'increaseQuantity'"
+      [barcode]="barcode()"
+      [submitFunction]="submitWareUpdateFunction()"
+    ></app-update-ware-form>
   } @else if (wareLookupStatus() === "notFound") {
-  <h3 class="text-xl font-semibold text-gray-800 mb-4 mt-4">
-    Ware not found. Create it?
-  </h3>
+    <h3 class="mt-4 mb-4 text-xl font-semibold text-gray-800">
+      Ware not found. Create it?
+    </h3>
 
-  <app-create-ware-form
-    [barcode]="barcode()"
-    [submitFunction]="submitWareCreateFunction()"
-  ></app-create-ware-form>
+    <app-create-ware-form
+      [barcode]="barcode()"
+      [submitFunction]="submitWareCreateFunction()"
+    ></app-create-ware-form>
   }
 </div>

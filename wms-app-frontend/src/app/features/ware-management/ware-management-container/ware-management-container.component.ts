@@ -53,14 +53,20 @@ export class WareManagementContainerComponent {
         tap({
           error: () =>
             this.notificationService.showError(
-              'Error: failed getting all wares'
+              'Error: failed getting all wares',
             ),
-        })
+        }),
       ),
   });
 
   handleWareCreateFormSubmit = (formValue: any) => {
-    this.wareService.post(formValue).subscribe({
+    const createWareRequest = {
+      ...formValue,
+      price: formValue.inventory.price,
+      quantity: formValue.inventory.quantity,
+    };
+
+    this.wareService.post(createWareRequest).subscribe({
       next: () => {
         this.wareListResource.reload();
         this.lookedUpWareResource.reload();
@@ -75,7 +81,7 @@ export class WareManagementContainerComponent {
   handleWareUpdateFormSubmit = (
     action: WareUpdateAction,
     barcode: string,
-    quantityDelta: number
+    quantityDelta: number,
   ) => {
     if (action === 'decreaseQuantity') quantityDelta *= -1;
 
@@ -88,7 +94,7 @@ export class WareManagementContainerComponent {
       error: (error) => {
         if (error.status === 422)
           this.notificationService.showError(
-            'Error: likely quantity too low to process packing order'
+            'Error: likely quantity too low to process packing order',
           );
         else this.notificationService.showError('Error: failed updating ware');
       },

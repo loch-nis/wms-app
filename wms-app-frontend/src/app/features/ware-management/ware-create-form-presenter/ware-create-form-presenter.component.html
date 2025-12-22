@@ -1,68 +1,80 @@
-<div
-  class="form-container mx-auto mb-2 max-w-lg rounded-lg bg-white p-6 shadow-md"
->
-  <form [formGroup]="form" (ngSubmit)="onSubmit()">
-    <div class="form-field mb-1">
-      <label for="barcode">Barcode:</label>
-      <input
-        type="text"
-        id="barcode"
-        formControlName="barcode"
-        class="mt-2 w-full rounded-md border border-gray-300 px-2 py-1 text-center focus:ring-2 focus:ring-blue-500 focus:outline-none"
-      />
-    </div>
+<mat-card class="mx-auto mt-4 max-w-md p-4">
+  <mat-card-header class="mb-4">
+    <mat-card-title>New Ware</mat-card-title>
+  </mat-card-header>
 
-    <div class="form-field mb-1">
-      <label for="name">Name:</label>
-      <input
-        type="text"
-        id="name"
-        formControlName="name"
-        class="mt-2 w-full rounded-md border border-gray-300 px-2 py-1 text-center focus:ring-2 focus:ring-blue-500 focus:outline-none"
-      />
-    </div>
-
-    <div class="form-field mb-1">
-      <label for="price">Price:</label>
-      <input
-        type="number"
-        id="price"
-        formControlName="price"
-        step="0.1"
-        class="mt-2 w-full rounded-md border border-gray-300 px-2 py-1 text-center focus:ring-2 focus:ring-blue-500 focus:outline-none"
-      />
-    </div>
-
-    <div class="form-field mb-1">
-      <label for="placement_id">Placement:</label>
-      <select
-        id="placement_id"
-        formControlName="placement_id"
-        class="mt-2 w-full rounded-md border border-gray-300 px-2 py-1 text-center focus:ring-2 focus:ring-blue-500 focus:outline-none"
-      >
-        <option value="" disabled>Select placement</option>
-        @for (p of placementOptions; track p) {
-          <option [value]="p">{{ p }}</option>
-        }
-      </select>
-    </div>
-
-    <div class="form-field mb-1">
-      <label for="quantity">Quantity:</label>
-      <input
-        type="number"
-        id="quantity"
-        formControlName="quantity"
-        min="0"
-        class="mt-2 w-full rounded-md border border-gray-300 px-2 py-1 text-center focus:ring-2 focus:ring-blue-500 focus:outline-none"
-      />
-    </div>
-
-    <button
-      type="submit"
-      class="mt-2 w-full rounded-lg bg-blue-600 py-2 font-semibold text-white transition duration-150 ease-in-out hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+  <mat-card-content>
+    <form
+      #wareCreateForm="ngForm"
+      (ngSubmit)="onSubmit(wareCreateForm)"
+      class="flex flex-col gap-2"
     >
-      Create ware
-    </button>
-  </form>
-</div>
+      <mat-form-field class="w-full">
+        <mat-label>Barcode</mat-label>
+        <input matInput name="barcode" [(ngModel)]="model.barcode" required />
+        <mat-error>Barcode is required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="w-full">
+        <mat-label>Name</mat-label>
+        <input matInput name="name" [(ngModel)]="model.name" required />
+        <mat-error>Name is required</mat-error>
+      </mat-form-field>
+
+      <div ngModelGroup="inventory" class="flex gap-4">
+        <mat-form-field class="w-1/2" floatLabel="always">
+          <mat-label>Price</mat-label>
+          <input
+            matInput
+            type="number"
+            name="price"
+            [(ngModel)]="model.inventory.price"
+            required
+            min="0"
+          />
+          <span matTextPrefix>$&nbsp;</span>
+          <mat-error>Price is required</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="w-1/2">
+          <mat-label>Quantity</mat-label>
+          <input
+            matInput
+            type="number"
+            name="quantity"
+            [(ngModel)]="model.inventory.quantity"
+            required
+            min="0"
+          />
+          <mat-error>Min 0</mat-error>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field class="w-full">
+        <mat-label>Placement</mat-label>
+        <mat-select
+          name="placement_id"
+          [(ngModel)]="model.placement_id"
+          required
+        >
+          @for (p of placementOptions; track p) {
+            <mat-option [value]="p">Placement {{ p }}</mat-option>
+          }
+        </mat-select>
+        <mat-error>Please select a placement</mat-error>
+      </mat-form-field>
+
+      <mat-card-actions>
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          class="w-full"
+          [disabled]="!wareCreateForm.form.valid"
+        >
+          Create Ware
+        </button>
+      </mat-card-actions>
+    </form>
+  </mat-card-content>
+</mat-card>

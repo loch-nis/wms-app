@@ -9,7 +9,7 @@ export class NotificationService {
 
   showSuccess(message: string = 'Success!'): void {
     this.snackBar.open(message, 'Close', {
-      duration: 1500,
+      duration: 750,
     });
   }
 

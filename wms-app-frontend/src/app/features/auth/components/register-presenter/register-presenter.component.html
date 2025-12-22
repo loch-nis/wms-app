@@ -1,51 +1,73 @@
-<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-  <div class="form-field mb-1">
-    <label for="first_name">First name:</label>
-    <input
-      type="text"
-      id="first_name"
-      formControlName="first_name"
-      class="mt-2 w-full rounded-md border border-gray-300 px-2 py-1 text-center focus:ring-2 focus:ring-blue-500 focus:outline-none"
-    />
+<form
+  [formGroup]="registerForm"
+  (ngSubmit)="onSubmit()"
+  class="flex w-sm flex-col gap-2"
+>
+  @if (isValidating$ | async; as result) {
+    <p>Checking if you are stealing my name...</p>
+  }
+  <mat-form-field>
+    <mat-label>First name</mat-label>
+    <input matInput formControlName="first_name" />
+    @if (registerForm.get("first_name")?.hasError("required")) {
+      <mat-error>First name is required</mat-error>
+    }
+
+    @if (registerForm.get("first_name")?.hasError("doNotStealMyFirstName")) {
+      <mat-error>That first name is MINE</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Last name</mat-label>
+    <input matInput formControlName="last_name" />
+
+    <mat-error>Last name is required</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Email</mat-label>
+    <input matInput formControlName="email" />
+    @if (registerForm.get("email")?.hasError("required")) {
+      <mat-error>Email is required</mat-error>
+    }
+    @if (registerForm.get("email")?.hasError("email")) {
+      <mat-error>Invalid email format</mat-error>
+    }
+  </mat-form-field>
+
+  <div formGroupName="passwords" class="flex flex-col gap-2">
+    <mat-form-field>
+      <mat-label>Password</mat-label>
+      <input matInput type="password" formControlName="password" />
+      @if (registerForm.get("passwords.password")?.hasError("required")) {
+        <mat-error>Password is required</mat-error>
+      }
+      @if (registerForm.get("passwords.password")?.hasError("minlength")) {
+        <mat-error>Must be at least 3 chars</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Confirm Password</mat-label>
+      <input
+        matInput
+        type="password"
+        formControlName="password_confirmation"
+        [errorStateMatcher]="crossFieldErrorMatcher"
+      />
+      @if (
+        registerForm
+          .get("passwords.password_confirmation")
+          ?.hasError("required")
+      ) {
+        <mat-error>Password confirmation is required</mat-error>
+      }
+      @if (registerForm.get("passwords")?.hasError("passwordMismatch")) {
+        <mat-error>Passwords do not match</mat-error>
+      }
+    </mat-form-field>
   </div>
 
-  <div class="form-field mb-1">
-    <label for="last_name">Last name:</label>
-    <input
-      type="text"
-      id="last_name"
-      formControlName="last_name"
-      class="mt-2 w-full rounded-md border border-gray-300 px-2 py-1 text-center focus:ring-2 focus:ring-blue-500 focus:outline-none"
-    />
-  </div>
-
-  <div class="form-field mb-1">
-    <label for="email">Email:</label>
-    <input
-      type="email"
-      id="email"
-      formControlName="email"
-      class="mt-2 w-full rounded-md border border-gray-300 px-2 py-1 text-center focus:ring-2 focus:ring-blue-500 focus:outline-none"
-      [class.border-red-500]="
-        registerForm.get('email')?.touched && registerForm.get('email')?.invalid
-      "
-    />
-  </div>
-
-  <div class="form-field mb-1">
-    <label for="password">Password:</label>
-    <input
-      type="password"
-      id="password"
-      formControlName="password"
-      class="mt-2 w-full rounded-md border border-gray-300 px-2 py-1 text-center focus:ring-2 focus:ring-blue-500 focus:outline-none"
-    />
-  </div>
-
-  <button
-    type="submit"
-    class="mt-2 w-full rounded-lg bg-blue-600 py-2 font-semibold text-white transition duration-150 ease-in-out hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-  >
-    Register
-  </button>
+  <button mat-raised-button color="primary" type="submit">Register</button>
 </form>
