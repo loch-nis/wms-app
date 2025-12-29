@@ -28,6 +28,7 @@ export class AuthContainerComponent {
     }
   });
 
+  // bad practice use of effect, refactor to use a guard instead!
   logoutEffect = effect(() => {
     if (this.mode() !== 'logout') return;
 

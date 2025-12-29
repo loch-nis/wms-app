@@ -7,6 +7,7 @@ import {
   Ware,
   WareUpdateAction,
   WareLookupStatus,
+  WareUpdateEvent,
 } from '../../../core/models/ware.model';
 import { NotificationService } from '../../../core/services/notification.service';
 import { tap } from 'rxjs';
@@ -59,7 +60,7 @@ export class WareManagementContainerComponent {
       ),
   });
 
-  handleWareCreateFormSubmit = (formValue: any) => {
+  handleWareCreate = (formValue: any) => {
     const createWareRequest = {
       ...formValue,
       price: formValue.inventory.price,
@@ -78,11 +79,7 @@ export class WareManagementContainerComponent {
     });
   };
 
-  handleWareUpdateFormSubmit = (
-    action: WareUpdateAction,
-    barcode: string,
-    quantityDelta: number,
-  ) => {
+  handleWareUpdate = ({ action, barcode, quantityDelta }: WareUpdateEvent) => {
     if (action === 'decreaseQuantity') quantityDelta *= -1;
 
     this.wareService.patch(barcode, quantityDelta).subscribe({
@@ -101,7 +98,7 @@ export class WareManagementContainerComponent {
     });
   };
 
-  handleWareDeleteSubmit = (barcode: string) => {
+  handleWareDelete = (barcode: string) => {
     this.wareService.delete(barcode).subscribe({
       next: () => {
         this.wareListResource.reload();

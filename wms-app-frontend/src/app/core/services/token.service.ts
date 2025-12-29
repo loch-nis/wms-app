@@ -1,52 +1,56 @@
-import { Injectable } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { inject, Injectable, PLATFORM_ID } from '@angular/core';
 
 @Injectable({
-	providedIn: 'root'
+  providedIn: 'root',
 })
 export class TokenService {
-	setToken(token: string)
-	{
-		localStorage.setItem('token', token);
-	}
+  private platformId = inject(PLATFORM_ID);
 
-	getToken(): string | null
-	{
-		return localStorage.getItem('token');
-	}
+  setToken(token: string) {
+    /*    if (!isPlatformBrowser(this.platformId)) {
+      return;
+    } */
 
-	removeToken()
-	{
-		localStorage.removeItem('token');
-	}
+    localStorage.setItem('token', token);
+  }
 
-	setTokenExpiry(expiry: number)
-	{
-		localStorage.setItem('token_expiry', expiry.toString());
-	}
+  getToken(): string | null {
+    if (!isPlatformBrowser(this.platformId)) {
+      return null;
+    }
 
-	getTokenExpiry(): number | null
-	{
-		const expiry = localStorage.getItem('token_expiry');
-		if (expiry)
-			return +expiry;
-		else
-			return null;
-	}
+    return localStorage.getItem('token');
+  }
 
-	removeTokenExpiry()
-	{
-		localStorage.removeItem('token_expiry');
-	}
+  removeToken() {
+    localStorage.removeItem('token');
+  }
 
-	removeTokenAndTokenExpiry()
-	{
-		this.removeToken();
-		this.removeTokenExpiry();
-	}
+  setTokenExpiry(expiry: number) {
+    localStorage.setItem('token_expiry', expiry.toString());
+  }
 
-	hasToken(): boolean
-	{
-		return this.getToken() !== null;
-	}
+  getTokenExpiry(): number | null {
+    if (!isPlatformBrowser(this.platformId)) {
+      return null;
+    }
 
+    const expiry = localStorage.getItem('token_expiry');
+    if (expiry) return +expiry;
+    else return null;
+  }
+
+  removeTokenExpiry() {
+    localStorage.removeItem('token_expiry');
+  }
+
+  removeTokenAndTokenExpiry() {
+    this.removeToken();
+    this.removeTokenExpiry();
+  }
+
+  hasToken(): boolean {
+    return this.getToken() !== null;
+  }
 }

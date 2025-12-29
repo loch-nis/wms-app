@@ -8,7 +8,7 @@ export const authRoutes: Routes = [
     canActivate: [noAuthGuard],
     loadComponent: () =>
       import('./containers/auth-container/auth-container.component').then(
-        (c) => c.AuthContainerComponent
+        (module) => module.AuthContainerComponent,
       ),
   },
   {
@@ -16,7 +16,7 @@ export const authRoutes: Routes = [
     canActivate: [noAuthGuard],
     loadComponent: () =>
       import('./containers/auth-container/auth-container.component').then(
-        (c) => c.AuthContainerComponent
+        (module) => module.AuthContainerComponent,
       ),
   },
   {
@@ -24,7 +24,7 @@ export const authRoutes: Routes = [
     canActivate: [authGuard],
     loadComponent: () =>
       import('./containers/auth-container/auth-container.component').then(
-        (c) => c.AuthContainerComponent
+        (module) => module.AuthContainerComponent,
       ),
   },
   {

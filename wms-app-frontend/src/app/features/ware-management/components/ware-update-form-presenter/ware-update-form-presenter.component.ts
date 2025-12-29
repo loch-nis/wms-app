@@ -1,7 +1,10 @@
-import { Component, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
-import { WareUpdateAction } from '../../../../core/models/ware.model';
+import {
+  WareUpdateAction,
+  WareUpdateEvent,
+} from '../../../../core/models/ware.model';
 
 @Component({
   selector: 'app-update-ware-form',
@@ -11,13 +14,15 @@ import { WareUpdateAction } from '../../../../core/models/ware.model';
 export class WareUpdateFormPresenterComponent {
   barcode = input<string>('');
   action = input<WareUpdateAction>('increaseQuantity');
-  submitFunction = input<
-    (action: WareUpdateAction, barcode: string, quantityDelta: number) => void
-  >(() => {});
+  save = output<WareUpdateEvent>();
 
   quantityDelta = 1;
 
   onSubmit() {
-    this.submitFunction()(this.action(), this.barcode(), this.quantityDelta);
+    this.save.emit({
+      action: this.action(),
+      barcode: this.barcode(),
+      quantityDelta: this.quantityDelta,
+    });
   }
 }

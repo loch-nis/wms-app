@@ -39,7 +39,7 @@
           <app-update-ware-form
             [action]="'decreaseQuantity'"
             [barcode]="ware.barcode"
-            [submitFunction]="submitWareUpdateFunction()"
+            (save)="update.emit($event)"
           ></app-update-ware-form>
         </td>
       </ng-container>
@@ -51,7 +51,7 @@
         <td mat-cell *matCellDef="let ware" class="hidden sm:table-cell">
           <app-ware-delete-button
             [barcode]="ware.barcode"
-            [submitFunction]="submitWareDeleteFunction()"
+            (delete)="delete.emit($event)"
           ></app-ware-delete-button>
         </td>
       </ng-container>

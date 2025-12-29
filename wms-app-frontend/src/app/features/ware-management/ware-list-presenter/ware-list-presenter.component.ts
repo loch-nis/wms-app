@@ -4,8 +4,9 @@ import {
   ViewChild,
   effect,
   input,
+  output,
 } from '@angular/core';
-import { Ware, WareUpdateAction } from '../../../core/models/ware.model';
+import { Ware, WareUpdateEvent } from '../../../core/models/ware.model';
 
 import { WareUpdateFormPresenterComponent } from '../components/ware-update-form-presenter/ware-update-form-presenter.component';
 import { WareDeleteButtonPresenterComponent } from '../ware-delete-button-presenter/ware-delete-button-presenter.component';
@@ -21,7 +22,6 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
     MatPaginatorModule,
   ],
   templateUrl: './ware-list-presenter.component.html',
-  styleUrl: './ware-list-presenter.component.scss',
 })
 export class WareListPresenterComponent implements AfterViewInit {
   wareList = input<Ware[]>([]);
@@ -47,8 +47,6 @@ export class WareListPresenterComponent implements AfterViewInit {
     });
   }
 
-  submitWareUpdateFunction = input<
-    (action: WareUpdateAction, barcode: string, quantityDelta: number) => void
-  >(() => {});
-  submitWareDeleteFunction = input<(barcode: string) => void>(() => {});
+  update = output<WareUpdateEvent>();
+  delete = output<string>();
 }

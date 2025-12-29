@@ -9,7 +9,7 @@ export interface Ware {
   updated_at: string | null;
 }
 
-export interface WareCreateFormModel {
+export interface NewWare {
   barcode: string;
   name: string;
   inventory: {
@@ -48,3 +48,9 @@ export const attributeLabels: Record<keyof Ware, string> = {
 export type WareLookupStatus = 'notSearched' | 'notFound' | 'found';
 
 export type WareUpdateAction = 'increaseQuantity' | 'decreaseQuantity';
+
+export interface WareUpdateEvent {
+  action: WareUpdateAction;
+  barcode: string;
+  quantityDelta: number;
+}

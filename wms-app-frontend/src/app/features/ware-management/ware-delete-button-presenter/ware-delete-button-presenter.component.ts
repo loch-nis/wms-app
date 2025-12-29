@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -8,9 +8,9 @@ import { FormsModule } from '@angular/forms';
 })
 export class WareDeleteButtonPresenterComponent {
   barcode = input<string>('');
-  submitFunction = input<(barcode: string) => void>(() => {});
+  delete = output<string>();
 
   onSubmit() {
-    this.submitFunction()(this.barcode());
+    this.delete.emit(this.barcode());
   }
 }

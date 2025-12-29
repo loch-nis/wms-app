@@ -17,7 +17,7 @@
           ></app-login-presenter>
         } @else if (mode() === "register") {
           <app-register-presenter
-            [submitFunction]="handleRegister"
+            (save)="handleRegister($event)"
           ></app-register-presenter>
         }
       </div>

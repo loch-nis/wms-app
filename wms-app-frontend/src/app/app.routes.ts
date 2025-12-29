@@ -1,44 +1,48 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './features/auth/guards/auth.guard';
+import { HomeComponent } from './features/home';
+import { AboutComponent } from './features/about';
 
 export const routes: Routes = [
-    {path: '', redirectTo: 'home', pathMatch: 'full'},
-    
-    {
-        path: 'home',
-        loadComponent: () => 
-            import('./features/home').then(c => c.HomeComponent),
-    },
-    {
-        path: 'about',
-        loadComponent: () => 
-            import('./features/about').then(c => c.AboutComponent),
-    },
-    {
-        path: 'hike-planner',
-        canActivate: [authGuard],
-        loadChildren: () =>
-            import('./features/hike-planner/hike-planner.routes')
-            .then(m => m.hikePlannerRoutes),
-    },
-    {
-        path: 'ware-management',
-        canActivate: [authGuard],
-        loadComponent: () => 
-            import('./features/ware-management')
-            .then(c => c.WareManagementContainerComponent),
-    },
-    {
-        path: 'stats',
-        canActivate: [authGuard],
-        loadComponent: () => 
-            import('./features/stats').then(c => c.StatsContainerComponent),
-    }, 
-    { 
-        path: 'auth',
-        loadChildren: () => 
-            import('./features/auth/auth.routes').then(c => c.authRoutes),
-    }, 
+  { path: '', redirectTo: 'home', pathMatch: 'full' },
 
-    { path: '**', redirectTo: 'home' },
+  {
+    path: 'home',
+    component: HomeComponent,
+  },
+  {
+    path: 'about',
+    component: AboutComponent,
+  },
+  {
+    path: 'hike-planner',
+    canActivate: [authGuard],
+    loadChildren: () =>
+      import('./features/hike-planner/hike-planner.routes').then(
+        (module) => module.hikePlannerRoutes,
+      ),
+  },
+  {
+    path: 'ware-management',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/ware-management').then(
+        (module) => module.WareManagementContainerComponent, // todo self-quiz: what kind of module? ng or js? :D
+      ),
+  },
+  {
+    path: 'stats',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/stats').then(
+        (module) => module.StatsContainerComponent,
+      ),
+  },
+  {
+    path: 'auth',
+    loadChildren: () =>
+      import('./features/auth/auth.routes').then((module) => module.authRoutes),
+  },
+
+  { path: '**', redirectTo: 'home' },
 ];

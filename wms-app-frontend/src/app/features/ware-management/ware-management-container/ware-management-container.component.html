@@ -10,15 +10,15 @@
       [(barcode)]="barcode"
       [lookedUpWare]="lookedUpWare()"
       [wareLookupStatus]="wareLookupStatus()"
-      [submitWareCreateFunction]="handleWareCreateFormSubmit"
-      [submitWareUpdateFunction]="handleWareUpdateFormSubmit"
+      (update)="handleWareUpdate($event)"
+      (create)="handleWareCreate($event)"
     ></app-ware-lookup>
   </div>
   <div>
     <app-ware-list
       [wareList]="wareList()"
-      [submitWareUpdateFunction]="handleWareUpdateFormSubmit"
-      [submitWareDeleteFunction]="handleWareDeleteSubmit"
+      (update)="handleWareUpdate($event)"
+      (delete)="handleWareDelete($event)"
     ></app-ware-list>
   </div>
 </main>

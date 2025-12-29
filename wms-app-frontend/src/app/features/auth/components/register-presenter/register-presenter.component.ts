@@ -1,4 +1,4 @@
-import { Component, inject, input, signal } from '@angular/core';
+import { Component, inject, input, output, signal } from '@angular/core';
 import {
   ReactiveFormsModule,
   FormBuilder,
@@ -31,7 +31,7 @@ import { AsyncPipe } from '@angular/common';
   templateUrl: './register-presenter.component.html',
 })
 export class RegisterPresenterComponent {
-  readonly submitFunction = input<(newUser: RegisterRequest) => void>(() => {});
+  save = output<RegisterRequest>();
   private formBuilder = inject(FormBuilder);
 
   registerForm = this.formBuilder.nonNullable.group({
@@ -73,11 +73,13 @@ export class RegisterPresenterComponent {
   );
 
   doNotStealMyFirstNameAsyncValidator(
-    control: AbstractControl,
+    formControl: AbstractControl,
   ): Observable<ValidationErrors | null> {
     return timer(1000).pipe(
       map(() => {
-        return control.value === 'Nis' ? { doNotStealMyFirstName: true } : null;
+        return formControl.value === 'Nis'
+          ? { doNotStealMyFirstName: true }
+          : null;
       }),
     );
     // todo self-quiz: when does this fire in relation to the sync validators?
@@ -87,15 +89,15 @@ export class RegisterPresenterComponent {
     if (this.registerForm.invalid) return;
     if (this.registerForm.pending) return;
 
-    const { passwords, ...rest } = this.registerForm.getRawValue();
+    const { passwords, ...rest } = this.registerForm.getRawValue(); // todo self-quiz: why raw?
 
-    const testRequest: RegisterRequest = {
+    const newUser: RegisterRequest = {
       ...rest,
       password: passwords.password,
       password_confirmation: passwords.password_confirmation,
     };
 
-    this.submitFunction()(testRequest);
+    this.save.emit(newUser);
   }
 
   // below is just to circumvent Angular Materials default error handling

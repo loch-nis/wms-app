@@ -76,7 +76,6 @@ describe('AuthService', () => {
     service = TestBed.inject(AuthService);
     tick();
 
-    // Act
     tick(5000);
 
     const refreshTokenRequest = httpClientMock.expectOne(
@@ -97,3 +96,5 @@ describe('AuthService', () => {
     flush();
   }));
 });
+
+// ng test --watch=false --browsers=ChromeHeadless

@@ -5,7 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { WareCreateFormModel } from '../../../core/models/ware.model';
+import { NewWare } from '../../../core/models/ware.model';
 
 @Component({
   selector: 'app-create-ware-form',
@@ -21,12 +21,14 @@ import { WareCreateFormModel } from '../../../core/models/ware.model';
 })
 export class WareCreateFormPresenterComponent {
   barcode = input<string>('');
-  submitFunction = input<(formValue: any) => void>(() => {});
-  syncBarcodeField = effect(() => {
-    this.model.barcode = this.barcode();
+  synchronizeBarcodeField = effect(() => {
+    this.newWare.barcode = this.barcode(); // todo self-quiz: why is this possible?
   });
 
-  model: WareCreateFormModel = {
+  save = output<NewWare>();
+
+  // todo self-quiz: why is this necessary? Hint: mutable object, binding
+  newWare: NewWare = {
     barcode: '',
     name: '',
     inventory: {
@@ -41,7 +43,7 @@ export class WareCreateFormPresenterComponent {
   onSubmit(form: NgForm) {
     if (form.invalid) return;
 
-    this.submitFunction()(this.model);
+    this.save.emit(this.newWare);
   }
 }
 

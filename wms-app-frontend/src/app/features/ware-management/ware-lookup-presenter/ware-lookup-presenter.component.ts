@@ -1,8 +1,9 @@
-import { Component, input, model } from '@angular/core';
+import { Component, input, model, output } from '@angular/core';
 import {
+  NewWare,
   Ware,
   WareLookupStatus,
-  WareUpdateAction,
+  WareUpdateEvent,
 } from '../../../core/models/ware.model';
 import { BarcodeFormPresenterComponent } from '../barcode-form-presenter/barcode-form-presenter.component';
 import { WareCreateFormPresenterComponent } from '../ware-create-form-presenter/ware-create-form-presenter.component';
@@ -20,14 +21,15 @@ import { IconModule } from '../../../shared/ui/icon';
     IconModule,
   ],
   templateUrl: './ware-lookup-presenter.component.html',
-  styleUrl: './ware-lookup-presenter.component.scss',
 })
 export class WareLookupPresenterComponent {
   barcode = model<string>('');
   lookedUpWare = input<Ware | null>(null);
   wareLookupStatus = input<WareLookupStatus>('notSearched');
   submitWareCreateFunction = input<(formValue: any) => void>(() => {});
-  submitWareUpdateFunction = input<
-    (action: WareUpdateAction, barcode: string, quantityDelta: number) => void
-  >(() => {});
+
+  update = output<WareUpdateEvent>();
+  create = output<NewWare>();
 }
+
+// todo refactor to output

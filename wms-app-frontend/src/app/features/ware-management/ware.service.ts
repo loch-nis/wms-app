@@ -2,7 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { Ware } from '../../core/models/ware.model';
-import { Observable, catchError, tap, throwError } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -25,7 +25,7 @@ export class WareService {
     return this.http.post(`${environment.apiUrl}/wares`, data).pipe(
       tap({
         error: (error) => console.error(error),
-      })
+      }),
     );
   }
 
@@ -34,7 +34,7 @@ export class WareService {
     return this.http.patch(`${environment.apiUrl}/wares/${barcode}`, data).pipe(
       tap({
         error: (error) => console.error(error),
-      })
+      }),
     );
   }
 
@@ -42,7 +42,7 @@ export class WareService {
     return this.http.delete(`${environment.apiUrl}/wares/${barcode}`).pipe(
       tap({
         error: (error) => console.error(error),
-      })
+      }),
     );
   }
 }

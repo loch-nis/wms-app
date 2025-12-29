@@ -26,7 +26,7 @@
     <app-update-ware-form
       [action]="'increaseQuantity'"
       [barcode]="barcode()"
-      [submitFunction]="submitWareUpdateFunction()"
+      (save)="update.emit($event)"
     ></app-update-ware-form>
   } @else if (wareLookupStatus() === "notFound") {
     <h3 class="mt-4 mb-4 text-xl font-semibold text-gray-800">
@@ -35,7 +35,7 @@
 
     <app-create-ware-form
       [barcode]="barcode()"
-      [submitFunction]="submitWareCreateFunction()"
+      (save)="create.emit($event)"
     ></app-create-ware-form>
   }
 </div>

@@ -8,7 +8,7 @@ import { inject } from '@angular/core';
 
 export const noAuthGuard = (
   route: ActivatedRouteSnapshot,
-  state: RouterStateSnapshot
+  state: RouterStateSnapshot,
 ) => {
   const authService = inject(AuthService);
   const router = inject(Router);
@@ -19,3 +19,9 @@ export const noAuthGuard = (
   }
   return true;
 };
+
+// todo "Do not return false if you need to redirect a user
+// • Use the UrlTree or RedirectCommand"
+// todo is this still correct? if so, fix!
+
+// todo same in auth.guard.ts

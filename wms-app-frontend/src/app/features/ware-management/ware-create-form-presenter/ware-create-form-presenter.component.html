@@ -11,13 +11,13 @@
     >
       <mat-form-field class="w-full">
         <mat-label>Barcode</mat-label>
-        <input matInput name="barcode" [(ngModel)]="model.barcode" required />
+        <input matInput name="barcode" [(ngModel)]="newWare.barcode" required />
         <mat-error>Barcode is required</mat-error>
       </mat-form-field>
 
       <mat-form-field class="w-full">
         <mat-label>Name</mat-label>
-        <input matInput name="name" [(ngModel)]="model.name" required />
+        <input matInput name="name" [(ngModel)]="newWare.name" required />
         <mat-error>Name is required</mat-error>
       </mat-form-field>
 
@@ -28,7 +28,7 @@
             matInput
             type="number"
             name="price"
-            [(ngModel)]="model.inventory.price"
+            [(ngModel)]="newWare.inventory.price"
             required
             min="0"
           />
@@ -42,7 +42,7 @@
             matInput
             type="number"
             name="quantity"
-            [(ngModel)]="model.inventory.quantity"
+            [(ngModel)]="newWare.inventory.quantity"
             required
             min="0"
           />
@@ -54,11 +54,13 @@
         <mat-label>Placement</mat-label>
         <mat-select
           name="placement_id"
-          [(ngModel)]="model.placement_id"
+          [(ngModel)]="newWare.placement_id"
           required
         >
-          @for (p of placementOptions; track p) {
-            <mat-option [value]="p">Placement {{ p }}</mat-option>
+          @for (placement of placementOptions; track placement) {
+            <mat-option [value]="placement"
+              >Placement {{ placement }}</mat-option
+            >
           }
         </mat-select>
         <mat-error>Please select a placement</mat-error>

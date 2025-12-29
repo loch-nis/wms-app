@@ -4,6 +4,7 @@ import {
   provideAppInitializer,
   provideZoneChangeDetection,
   isDevMode,
+  PLATFORM_ID,
 } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
@@ -13,22 +14,32 @@ import { authInterceptor } from './features/auth/interceptors/auth.interceptor';
 import { AuthService } from './features/auth/auth.service';
 import { networkErrorInterceptor } from './core/interceptors/network-error.interceptor';
 import { provideServiceWorker } from '@angular/service-worker';
+import {
+  provideClientHydration,
+  withEventReplay,
+} from '@angular/platform-browser';
+import { isPlatformBrowser } from '@angular/common';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideHttpClient(
-      withInterceptors([authInterceptor, networkErrorInterceptor])
+      withInterceptors([authInterceptor, networkErrorInterceptor]),
     ),
     provideAppInitializer(() => {
+      const platformId = inject(PLATFORM_ID);
       const authService = inject(AuthService);
-      authService.loadUserFromToken();
+
+      if (isPlatformBrowser(platformId)) {
+        authService.loadUserFromToken();
+      }
       return;
     }),
     provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),
       registrationStrategy: 'registerWhenStable:30000',
     }),
+    provideClientHydration(withEventReplay()),
   ],
 };
