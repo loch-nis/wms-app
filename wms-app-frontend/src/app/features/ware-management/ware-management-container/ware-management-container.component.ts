@@ -5,7 +5,6 @@ import { rxResource } from '@angular/core/rxjs-interop';
 import { WareService } from '../ware.service';
 import {
   Ware,
-  WareUpdateAction,
   WareLookupStatus,
   WareUpdateEvent,
 } from '../../../core/models/ware.model';

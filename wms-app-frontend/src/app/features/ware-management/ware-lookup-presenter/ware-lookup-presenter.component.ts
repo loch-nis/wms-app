@@ -26,10 +26,6 @@ export class WareLookupPresenterComponent {
   barcode = model<string>('');
   lookedUpWare = input<Ware | null>(null);
   wareLookupStatus = input<WareLookupStatus>('notSearched');
-  submitWareCreateFunction = input<(formValue: any) => void>(() => {});
-
   update = output<WareUpdateEvent>();
   create = output<NewWare>();
 }
-
-// todo refactor to output

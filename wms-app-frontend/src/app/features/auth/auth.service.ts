@@ -1,4 +1,11 @@
-import { Injectable, signal, computed, inject, effect } from '@angular/core';
+import {
+  Injectable,
+  signal,
+  computed,
+  inject,
+  effect,
+  PLATFORM_ID,
+} from '@angular/core';
 import { TokenResponse, AuthUser } from './models/auth.model';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
@@ -6,22 +13,30 @@ import { EMPTY, filter, switchMap, tap, throwError, timer } from 'rxjs';
 import { TokenService } from '../../core/services/token.service';
 import { LoginRequest, RegisterRequest } from './models/auth.model';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly _authUser = signal<AuthUser | undefined>(undefined);
+  private readonly _authUser = signal<AuthUser | null | undefined>(undefined);
   private readonly _tokenExpiry = signal<number | undefined>(undefined);
 
   readonly authUser = this._authUser.asReadonly();
-  readonly isLoggedIn = computed(() => this._authUser() !== undefined);
+  readonly isLoggedIn = computed(() => !!this._authUser());
   readonly tokenExpiry = this._tokenExpiry.asReadonly();
 
   private readonly http = inject(HttpClient);
   private readonly tokenService = inject(TokenService);
 
+  private readonly platformId = inject(PLATFORM_ID);
+
   constructor() {
+    if (!isPlatformBrowser(this.platformId)) {
+      this._authUser.set(null);
+      return;
+    }
+
     const storedTokenExpiry = this.tokenService.getTokenExpiry();
     if (storedTokenExpiry) this._tokenExpiry.set(storedTokenExpiry);
   }
@@ -54,13 +69,25 @@ export class AuthService {
   loadUserFromToken() {
     if (this.isLoggedIn()) return;
 
-    if (!this.tokenService.hasToken()) return;
+    if (!this.tokenService.hasToken()) {
+      this._authUser.set(null);
+      return;
+    }
 
-    // should this maybe also if token expired?
+    const tokenExpiry = this.tokenService.getTokenExpiry();
+    if (!tokenExpiry) {
+      this._authUser.set(null);
+      return;
+    }
+
+    if (this.isTokenExpired(tokenExpiry)) {
+      this._authUser.set(null);
+      return;
+    }
 
     this.http.get<AuthUser>(`${environment.apiUrl}/auth/me`).subscribe({
       next: (user) => this._authUser.set(user),
-      error: () => console.warn('Error in the loadUserFromToken function'),
+      error: () => this._authUser.set(null),
     });
   }
 
@@ -69,7 +96,7 @@ export class AuthService {
   }
 
   logout() {
-    this._authUser.set(undefined);
+    this._authUser.set(null);
     return this.http
       .post(`${environment.apiUrl}/auth/logout`, {})
       .pipe(tap(() => this.tokenService.removeTokenAndTokenExpiry()));
@@ -78,7 +105,6 @@ export class AuthService {
   private readonly _tokenRefreshSubscription = toObservable(this._tokenExpiry)
     .pipe(
       filter((expiryTimestamp): expiryTimestamp is number => !!expiryTimestamp),
-      // switchMap == monadic bind
       switchMap((expiryTimestamp) => {
         if (this.isTokenExpired(expiryTimestamp)) {
           this.handleExpiredToken();
@@ -87,12 +113,11 @@ export class AuthService {
         const refreshDelay = this.calculateRefreshDelay(expiryTimestamp);
         return timer(refreshDelay);
       }),
-      switchMap(() => this.refreshToken()), // todo this is just a plan to open the box
+      switchMap(() => this.refreshToken()),
       takeUntilDestroyed(),
     )
     .subscribe({
-      // todo this is when the box opens
-      next: (response) => this.setTokenAndTokenExpiry(response),
+      next: (tokenResponse) => this.setTokenAndTokenExpiry(tokenResponse),
       error: () => this.handleExpiredToken(),
     });
 

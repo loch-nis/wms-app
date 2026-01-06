@@ -32,6 +32,6 @@ export const authInterceptor: HttpInterceptorFn = (request, next) => {
         // could add more error handling here, such as for 403
       }
       return throwError(() => error);
-    })
+    }),
   );
 };

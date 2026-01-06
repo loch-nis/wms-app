@@ -56,7 +56,11 @@ describe('AuthService', () => {
     const loginRequest = httpClientMock.expectOne(
       `${environment.apiUrl}/auth/login`,
     );
+
     tokenServiceSpy.hasToken.and.returnValue(true);
+    const futureTimestamp = Date.now() + 3600 * 1000;
+    tokenServiceSpy.getTokenExpiry.and.returnValue(futureTimestamp);
+
     loginRequest.flush(mockLoginResponse);
 
     expect(tokenServiceSpy.setToken).toHaveBeenCalledWith('abc');
@@ -76,7 +80,8 @@ describe('AuthService', () => {
     service = TestBed.inject(AuthService);
     tick();
 
-    tick(5000);
+    const fiveSeconds = 5000;
+    tick(fiveSeconds);
 
     const refreshTokenRequest = httpClientMock.expectOne(
       `${environment.apiUrl}/auth/refresh`,

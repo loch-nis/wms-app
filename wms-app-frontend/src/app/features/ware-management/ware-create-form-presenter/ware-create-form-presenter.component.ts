@@ -21,13 +21,11 @@ import { NewWare } from '../../../core/models/ware.model';
 })
 export class WareCreateFormPresenterComponent {
   barcode = input<string>('');
+  save = output<NewWare>();
   synchronizeBarcodeField = effect(() => {
-    this.newWare.barcode = this.barcode(); // todo self-quiz: why is this possible?
+    this.newWare.barcode = this.barcode();
   });
 
-  save = output<NewWare>();
-
-  // todo self-quiz: why is this necessary? Hint: mutable object, binding
   newWare: NewWare = {
     barcode: '',
     name: '',
@@ -46,27 +44,3 @@ export class WareCreateFormPresenterComponent {
     this.save.emit(this.newWare);
   }
 }
-
-// todo - it would still work without the ngModelGroup BUT it enables two things:
-/* 
-What ngModelGroup actually does for you:
-
-    Logical Grouping in form.value:
-
-        With ngModelGroup: The NgForm.value (the form's internal state) will automatically structure itself as { inventory: { price: 10, quantity: 5 } }.
-
-        Without it: If you just used name="price", the form might try to flatten it or get confused about where price belongs in its own internal map of controls, even if your local model object is nested.
-
-    Group Validation Status (valid, touched, dirty):
-
-        This is the big one. ngModelGroup allows you to check the status of just that section.
-
-        Example: You can show an error message for the whole inventory section:
-        HTML
-
-<div ngModelGroup="inventory" #invGroup="ngModelGroup">
-   </div>
-<div *ngIf="invGroup.invalid">Please fix inventory errors</div>
-
-Without it: You have no way to say "Is the inventory section valid?". You would have to check price.invalid || quantity.invalid manually.
-*/

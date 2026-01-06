@@ -49,9 +49,8 @@ export class RegisterPresenterComponent {
       },
       { validators: this.passwordMatchValidator },
     ),
+    interests: this.formBuilder.array<string>([]),
   });
-
-  // todo a small dynamic form?! interests?!
 
   passwordMatchValidator(formGroup: AbstractControl): ValidationErrors | null {
     const password = formGroup.get('password')?.value;
@@ -67,9 +66,8 @@ export class RegisterPresenterComponent {
       : { passwordMismatch: true };
   }
 
-  // todo showcase async operator? On the value or status event stream? DONE:
   isValidating$ = this.registerForm.statusChanges.pipe(
-    map((status) => status === 'PENDING'), // todo self-quiz: how does this work?
+    map((status) => status === 'PENDING'),
   );
 
   doNotStealMyFirstNameAsyncValidator(
@@ -82,14 +80,30 @@ export class RegisterPresenterComponent {
           : null;
       }),
     );
-    // todo self-quiz: when does this fire in relation to the sync validators?
+  }
+
+  get interests() {
+    return this.registerForm.controls.interests;
+  }
+
+  addInterest() {
+    this.interests.push(
+      this.formBuilder.control('', [
+        Validators.required,
+        Validators.minLength(3),
+      ]),
+    );
+  }
+
+  removeInterest(index: number) {
+    this.interests.removeAt(index);
   }
 
   onSubmit() {
     if (this.registerForm.invalid) return;
     if (this.registerForm.pending) return;
 
-    const { passwords, ...rest } = this.registerForm.getRawValue(); // todo self-quiz: why raw?
+    const { passwords, interests, ...rest } = this.registerForm.getRawValue();
 
     const newUser: RegisterRequest = {
       ...rest,

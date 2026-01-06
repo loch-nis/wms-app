@@ -5,7 +5,6 @@ import { AboutComponent } from './features/about';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
-
   {
     path: 'home',
     component: HomeComponent,
@@ -27,7 +26,7 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () =>
       import('./features/ware-management').then(
-        (module) => module.WareManagementContainerComponent, // todo self-quiz: what kind of module? ng or js? :D
+        (module) => module.WareManagementContainerComponent,
       ),
   },
   {

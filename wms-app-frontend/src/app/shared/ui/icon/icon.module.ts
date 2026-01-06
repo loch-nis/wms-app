@@ -23,7 +23,7 @@ import {
 
 @NgModule({
   imports: [FontAwesomeModule],
-  exports: [FontAwesomeModule], // todo self-quiz: why this?
+  exports: [FontAwesomeModule],
 })
 export class IconModule {
   private readonly faIconLibrary = inject(FaIconLibrary);
@@ -47,10 +47,6 @@ export class IconModule {
   ];
 
   constructor() {
-    // todo self-quiz: why this?
     this.faIconLibrary.addIcons(...this.icons);
   }
 }
-
-// todo what would we do with modern stand-alone angular instead of this?
-// why? bundle size, tree shaking

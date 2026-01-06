@@ -19,10 +19,3 @@ import { FormsModule } from '@angular/forms';
 export class BarcodeFormPresenterComponent {
   barcode = model<string>('');
 }
-
-// todo self-quiz: why is it a model here and a signal in the parent? :D
-
-// todo slet: analogy (child component perspektiv):
-// signal() → private field with setter + getter
-// model() → public setter + getter
-// input() → public getter
